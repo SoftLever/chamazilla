@@ -1,0 +1,222 @@
+body, html{
+	height: 100vh;
+	width: 100vw;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+.flex_container{
+	width: 100%;
+	height: 90%; /*occupies 90% of the total body height*/
+	background-color: #f7f5f6;
+}
+
+.flex_container h1, h2{
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	color:#03ddff;
+	font-weight: lighter;
+}
+
+.flex_container h1{
+	font-size: 30px;
+}
+
+.flex_container h2{
+	font-size: 20px;
+}
+
+.flex_container p{
+	font-family:  Impact, Charcoal, sans-serif;
+	font-size: 18px;
+	color: #ddd;
+}
+
+.navbar{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 5%; /*navbar occupies 5% of the flex-container height*/
+	background-color: #03ddff;
+	position: fixed;
+}
+
+.navbar a{
+	width: 150px;
+	/*height:100%;*/
+	font-size: 20px;
+	display: inline-block;
+	color: #fff;
+	text-decoration: none;
+	text-align: center;
+	padding: 10px 10px 10px 10px;
+}
+
+.navbar a:hover{
+	color: #03ddff;
+	background-color: #fff;
+	text-decoration: none;
+	text-align: center;
+}
+
+.row{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	height: 95%; /*row occupies 95% of the flex-container height*/
+	align-items: center;
+	justify-content: center;
+}
+
+.about_column{
+	display: flex;
+	flex-direction: column;
+	flex:100%;
+	width:100%;
+	height: 25%;
+	background-color: #fff;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	margin-top: 5px;
+}
+
+.column{
+	display: flex;
+	flex-direction: column;
+	flex:30%;
+	width: 30%; /* column occupies 30% of the row width*/
+	height: 50%;/*column occupies 50% of the row height*/
+	background-color: #fff;
+	margin: 10px 5px;
+}
+
+.description_row{
+	color: black;
+}
+
+
+.icon_row, .title_row, .description_row{
+	width: 100%;/*the width of these divs is 100% of the column width*/
+	text-align: center;
+	margin-top:15px;
+}
+
+.icon_row{
+	height: 50%;/*icons take up 50% of the column height*/
+}
+
+.icon_row img{
+	height: 100%;
+	width: 50%;
+}
+
+.title_row{
+	height: 20%;/*title_row takes 15% of column height*/
+}
+
+.description_row{
+	height: 30%;/*description_row takes 25% of the column height*/
+}
+
+.signup_column{
+	display: flex;
+	flex-direction: column;
+	/*background-color: #ddd;*/
+	width:100%; /*the width occupies 100% of the row width*/
+	height: 25%; /*the height occupies 25% of the row height*/
+	flex:100%;
+	justify-content: center;
+	align-items: center;
+}
+
+.signup_column button:hover{
+	cursor: pointer;
+}
+
+.signup_column button{
+	width: 400px;
+	height: 50px;
+	background-color: #03ddff;
+	border-radius: 10px 10px 10px 10px;
+	color: #fff;
+	font-size: 30px;
+	border: none;
+}
+
+.authdiv{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 500px;
+	height:80%; /*authdiv occupies 80% of the row div*/
+	border-radius: 10px 10px 10px 10px;
+	background-color: #ddd;.
+}
+
+.authdiv button{
+	width: 80%;
+	height: 50px;
+}
+
+.authdiv button:hover{
+	cursor: pointer;
+}
+
+.footer{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0;
+	width: 100%;
+	height: 10%; /*occupies 10% of the total body height*/
+	background-color: #03ddff;
+}
+
+.footer p{
+	color: #fff;
+	font-size: 20px;
+}
+
+.footer a{
+	text-decoration: none;
+	color: #fff;
+}
+
+.footer a:hover{
+	color: #ddd;
+}
+
+table, td, th{
+	border: solid;
+	border-color: green;
+	border-collapse: collapse;
+}
+
+/*Style for mobile devices */
+@media (max-width: 700px){
+	.flex_container{
+		height: 100%;/*return height to 100% because footer won't be available*/
+	}
+
+	.footer{/*remove the footer for mobile devices*/
+		display: none;
+	}
+
+	.signup_column h2{ /*display the paragraph for large devices only*/
+		display: none;
+	}
+
+	.column{
+		flex:100%;
+		width:100%;
+	}
+
+	.navbar a{
+		margin:auto;
+	}
+
+	.navbar a:active{
+		border-bottom: solid black;
+	}
+}

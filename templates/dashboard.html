@@ -1,0 +1,199 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="{% static '/css/dashboard.css' %}">
+	<title>CS Dashboard |{% block title %} Chama Info {% endblock title %}</title>
+</head>
+<body>
+
+	<div class = "mobile_title" id = "mobile_title">
+		<!--<a id = "reveal_navbar" href="" onclick="revealMobileNavbar()">-->
+		<img src="{% static '/images/menu.png' %}" onclick = "revealMobileNavbar()"></a>
+		<h2 id = "page_title">{% block mobile_title %}DASHBOARD{% endblock mobile_title %}</h2>
+	</div>
+
+	<div class = "dashboard_navbar" id = "dashboard_navbar">
+		<div class="app_name">
+			<h1>CHAMA SMART</h1><img src="{% static '/images/menu.png' %}" onclick="revealMobileNavbar()">
+		</div>
+
+		<a href="{% url 'dashboard' %}"><span><img class = "navbar_icon" src="{% static '/images/question.png' %}"></span>CHAMA INFO</a>
+		<a href="{% url 'members' %}"><span><img class = "navbar_icon" src="{% static '/images/group.png' %}"></span>MEMBERSHIP</a>
+		<a href="{% url 'loans' %}" ><span><img class = "navbar_icon" src="{% static '/images/money.png' %}"></span>LOANS</a>
+		<a href="{% url 'transactions' %}" onclick =><span><img class = "navbar_icon" src="{% static '/images/smartphone.png' %}"></span>TRANSACTIONS</a>
+		<a href="{% url 'index' %}" ><img class = "navbar_icon" src="{% static '/images/house.png' %}"><span>HOME</span></a>
+	</div>
+
+	<div class= "content" id = "content">
+
+		<div class = "content_row">
+
+			{% block content %}
+
+				<div class = "content_column">
+
+					<div class="info_container">
+						<div class = "info_content">
+							<div class = "info_title">
+								<h1>BASIC INFO</h1>
+							</div>
+
+							<table class = "info_table">
+								<tr>
+									<td><h3>Chama Name</h3></td>
+									<td>{{ chamaInfo.chamaName }}</td>
+								</tr>
+
+								<tr>
+									<td></td>
+									<td><a href = "#">Edit</a></td>
+								</tr>
+
+								<tr>
+									<td><h3>Members</h3></td>
+									<td>{{ members_count }}</td>
+								</tr>
+
+								<tr>
+									<td></td>
+									<td><a href = "{% url 'members' %}">Manage</a></td>
+								</tr>
+
+								<tr>
+									<td><h3>Date Created</h3></td>
+									<td>{{ chamaInfo.regDate }}</td>
+								</tr>
+
+								<tr>
+									<td><h3>Representative</h3></td>
+									<td>Lilian Akinyi</td>
+								</tr>
+							</table>
+
+						</div>
+					</div>
+					
+					<div class="info_container">
+						<div class = "info_content">
+							<div class = "info_title">
+								<h1>FUNDS</h1>
+							</div>
+							<table class = "info_table">
+								<tr>
+									<td><h2 class="funds">{{ chamaInfo.funds }}</h2></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+
+				</div>
+
+				<div class = "content_column">
+
+					<div class="info_container">
+						<div class = "info_content">
+							<div class = "info_title">
+								<h1>SUBSCRIPTION</h1>
+							</div>
+
+							<table class="info_table">
+								<tr>
+									<td><h3>Subscription</h3></td>
+									<td>{{ chamaInfo.subscription }}</td>
+								</tr>
+
+								<tr>
+									<td></td>
+									<td><a href="#">More info</a></td>
+								</tr>
+
+								<tr>
+									<td><h3>Expiry</h3></td>
+									<td>2/2/2021</td>
+								</tr>
+
+								<tr>
+									<td></td>
+									<td><a href="#">view more</a></td>
+								</tr>								
+							</table>
+
+						</div>
+					</div>
+
+					<div class="info_container">
+						<div class = "info_content">
+							<div class = "info_title">
+								<h1>RECENT TRANSACTIONS</h1>
+							</div>
+					<table class = "info_table">
+						<tr>
+							<th>Type</th>
+							<th>Member</th>
+							<th>Amount</th>
+							<th>Time</th>
+						</tr>
+	
+						{% for transaction in transactions %}
+
+							<tr>
+								<td>{{ transaction.transactionType }}</td>
+								<td>{{ transaction.memberID.chamaID.chamaName }}</td>
+								<td>{{ transaction.amount }}</td>
+								<td>{{ transaction.transactionDate }}</td>
+							</tr>
+
+						{% endfor %}
+					</table>
+						</div>
+					</div><!-- End of info_container-->
+				</div><!-- End of content_column -->
+
+			{% endblock content %}
+
+		</div><!-- End of content_row -->
+	</div><!-- End of container -->
+
+</body>
+</html>
+
+
+<script type="text/javascript">
+	function updateContent(newtitle){
+		title = document.getElementById("page_title");
+		title.innerHTML = newtitle;
+		revealMobileNavbar()/*hide navbar after updating title*/
+	}/*The above function is a lame ass solution - But I'll leave it here just in
+	case django blocks don't work well enough for me*/
+
+	function revealMobileNavbar(){
+		navbar = document.getElementById("dashboard_navbar");
+		if (navbar.style.display != "flex"){
+			navbar.style.display = "flex";
+		}
+		else{
+			navbar.style.display = "none";
+		}
+	}/* Out of all the methods tried to switch between display flex and none, this 
+	was the most efficient*/
+
+	/* This function changes the margin of the navigation bar from 
+	mobile_title div (if in mobile view) so that the navbar covers it*/
+	function changeNavbarMargin(){
+		mobile_title = document.getElementById("mobile_title");
+		if (mobile_title.style.display === "none"){
+			console.log("Large device");
+		}
+		else{
+			new_margin = (-mobile_title.offsetHeight).toString().concat("px");
+			console.log(new_margin);
+			document.getElementById("dashboard_navbar").style.marginTop = new_margin;
+		}
+	}
+
+	/*Always call this function when page is loaded or resized */
+	changeNavbarMargin() /*on load */
+	window.onresize = changeNavbarMargin; /* when browser is resized */
+
+</script>

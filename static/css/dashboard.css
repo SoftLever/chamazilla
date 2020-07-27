@@ -1,0 +1,283 @@
+body, html{
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+.main_container{
+	/* 100% of body width and height */
+	height: 100%;
+	width: 100%;
+}
+
+.dashboard_navbar{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 5%;/* 5% of main_container height and 100% width */
+	width: 100%;
+	background-color: #03ddff;
+}
+
+.dashboard_navbar a{
+	color:#fff;
+	font-size: 20px;
+	text-decoration: none;
+	padding: 10px 10px 10px 10px;
+}
+
+.dashboard_navbar a:hover{
+	color: #03ddff;
+	background-color: #fff;
+}
+
+.dashboard_navbar span, img{
+	vertical-align: middle;
+}
+
+.dashboard_navbar img{
+	padding: 0 20px 0 0;
+}
+
+.navbar_icon{
+	width: 50px;
+	height: 50px;
+}
+
+.app_name, .mobile_title{
+	display: none;/*Hide these for large screens*/
+}
+
+/*Styling from Chama_info page */
+.content{
+	height: 95%;
+	width: 100%;
+	background-color: #f7f5f6;
+}
+
+.content_row{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	width: 100%;
+	height: 100%;/* 100% of content height */
+}
+
+.content_column{
+	display: flex;
+	flex-direction: column;
+	flex: 50%;
+	width: 50%;/*50 % of content_row width*/
+	height: 100%; /*take 100% of content_row height */
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.info_container{
+	width: 90%;/*take 90% of column width*/
+	height: 50%;/*take 40% of column height*/
+	margin:10px 0 10px 0;
+}
+
+.info_content{
+	width: 100%;
+	height: 100%; /* 80% of info_container height */
+	background-color: #fff;
+	border-radius: 10px 10px 0 0;
+}
+
+.info_content h1{
+	color: #fff;
+}
+
+.funds{
+	color:#03ddff;
+	font-size: 5em;
+	text-align: center;
+}
+
+.info_title{
+	display: flex;
+	justify-content: center;
+	background-color: #03ddff;
+	width: 100%; /* 100% of info_container width */
+	height: 20%; 
+	margin: 0;
+	border-radius: 10px 10px 0 0;
+}
+
+.info_table{
+	width: 100%;
+	height: 70%;
+	color: #bbb;
+}
+
+.info_table h3{
+	font-size: 1.2em;
+	font-weight: lighter;
+}
+
+.info_table a{
+	text-decoration: none;
+	color: #03ddff;
+	font-size: 17px;
+}
+
+.info_table th{
+	text-align: left;
+	color: #03ddff;
+}
+
+/*styling for chamaMembership*/
+.add_record_row{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	width: 100%; /*100% of content_row width*/
+	height: 30%; /*30% of content_row height*/
+}
+
+.form_div{
+	display: flex;
+	flex-direction: row;
+	height: 100%; /*100% of add_records_row*/
+	width: 100%; /*100% of add_record_row width*/
+	justify-content: center;
+	align-items: center;
+}
+
+
+/* uncomment this just in case...
+.site_form{
+	height: 80%;
+	width: 80%; /*80% of form_div width*
+}*/
+
+.site_form input, select{
+	display: block;
+	width: 350px;/*change this to percentage if this doesn't work well*/
+	margin: 5px 0 20px 0;
+}
+
+.submit{
+	background-color: #03ddff;
+	border:none;
+	color: #fff;
+	height: 50px;
+	border-radius: 10px 10px 10px 10px;
+	font-size: 20px;
+}
+
+.submit:hover{
+	cursor: pointer;
+}
+
+.display_records_row{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	width: 100%;
+	height: 70%;
+}
+
+.display_records_row h1{
+	color:#03ddff;
+}
+
+.display_records_row table{
+	width: 100%;
+}
+
+.delete{
+	color: #aaa;
+}
+
+
+/*
+.show_form_div{
+	height: 10%;
+	justify-content: center;
+}*/
+
+@media (max-width: 745px){
+
+	.mobile_title{
+		position: relative;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		width: 100%;
+		height: 5%;
+		background-color: #03ddff;
+		color:#fff;
+	}
+
+	.mobile_title img{
+		width: 30px;
+		height: 30px;
+		margin: 0 20px;
+	}
+
+	.content{
+		margin-top: 0px;/*This will be changed by js*/
+	}
+
+	.dashboard_navbar{
+		display: none; /* Hide navbar by default, This will be changed by js */
+		position: relative;
+		justify-content: flex-start;
+		align-items: flex-start;
+		flex-direction: column;
+		width: 80%; /*width is 80 % of body */
+		height: 100%; /* height becomes 100% of main_container */
+		position: relative;
+		z-index: 1000;
+		border-right: solid #ddd;
+		border-width: 1px;
+	}
+
+	.dashboard_navbar a{
+		margin: 20px 0;
+	}
+
+	.dashboard_navbar a:hover{
+		width: 100%; /*width is 100% of navbar width */
+		color:#fff;
+		background-color: #03dddd;
+	}
+
+	.app_name{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 10%;/* 10% of the navbar height */
+		width: 100%; /* 100% of the navbar width */
+		border-bottom: solid #ddd;
+		border-width: 2px;
+	}
+
+	.app_name h1{
+		color: #fff;
+		font-size: 20px;
+		font-weight: lighter;
+	}
+
+	.app_name img{
+		width: 30px;
+		height: 30px;
+		margin: 0 0 0 20px;
+	}
+
+	.app_name img:hover, .mobile_title img:hover{
+		cursor: pointer;
+	}
+
+	/*Style for chama_info*/
+	.content_column{
+		flex: 100%;
+		width: 100%; /* 100% of row */
+	}
+
+	/*styling for chamaMembership*/
+}

@@ -1,0 +1,49 @@
+{% extends 'dashboard.html' %}
+
+{% block title %} Transactions {% endblock title %}
+{% block mobile_title %}TRANSACTIONS{% endblock mobile_title %}
+{% block content %}
+
+	<div class="add_record_row">
+
+		<!-- I might be returning this hide/show feature later -
+		<div class="show_form_div">
+			<button onclick="hideForm()"> Add New Member</button>
+		</div> -->
+
+		<div class = "form_div" id = "form_div">
+			<form class = "site_form" action = "#" method="POST">
+				{% csrf_token %}
+				{{ form }}
+				<input type="submit" value=" Add Transaction" class="submit">
+			</form>
+		</div>
+	</div>
+
+	<div class = "display_records_row">
+		<h1> Transactions List</h1>
+
+		<table class="info_table">
+			<tr>
+				<th>Transaction Type</th>
+				<th>Member Name</th>
+				<th>Amount</th>
+				<th>Date</th>
+			</tr>
+
+			{% for transaction in transactions %}
+
+				<tr>
+					<td> {{ transaction.transactionType }} </td>
+					<td> {{ transaction.memberID.firstName }} {{ transaction.memberID.secondName }}</td>
+					<td> {{ transaction.amount }}</td>
+					<td> {{ transaction.transactionDate }}
+				</tr>
+
+			{% endfor %}
+
+		</table>
+
+	</div>
+
+{% endblock content %}

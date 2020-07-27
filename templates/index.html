@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+	<div class = "about_column">
+		<h1>About Chama Smart</h1>
+		<p> Chama Smart is a service that makes management of investement groups (Chamas) easier.</p>
+	</div>
+
+	<div class = "column">
+
+		<div class = "title_row">
+			<h1> Member Management</h1>
+		</div>
+
+		<div class = "icon_row">
+			<img src="{% static '/images/group.png' %}">
+		</div>
+
+		<div class = "description_row">
+			<p> With Chama Smart, you can easily add and remove members and view information about each member.</p>
+		</div>
+
+	</div>
+
+	<div class = "column">
+
+		<div class = "title_row">
+			<h1> Loan Management</h1>
+		</div>
+
+		<div class = "icon_row">
+			<img src="{% static '/images/money.png' %}">
+		</div>
+
+		<div class = "description_row">
+			<p> Gone are the days when you had to calculate interests on loans issued and keep track of repayments on paper. Chama Smart makes issuing and tracking loans easy.</p>
+		</div>
+
+	</div>
+
+	<div class = "column">
+
+		<div class = "title_row">
+			<h1>Transaction Management</h1>
+		</div>
+
+		<div class = "icon_row">
+			<img src="{% static '/images/smartphone.png' %}">
+		</div>
+
+		<div class = "description_row">
+			<p> You can keep track of contributions, fines and other transaction information with Chama Smart.</p>
+		</div>
+
+	</div>
+
+	<div class = "signup_column">
+		{% if 2 == 2 %}
+			<!--if user is authenticated -->
+			<h2> Thank you for staying connected with Chama Smart</h2>
+			<a href = "{% url 'dashboard' %}"><button>Go to Dashboard</button></a>
+		{% else %}
+			<h2> Management of Chamas has never been easier,</h2>
+			<a href = "{% url 'signup' %}"><button>Try Chama Smart Free</button></a>
+		{% endif %}
+	</div>
+
+{% endblock content %}
