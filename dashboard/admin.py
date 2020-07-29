@@ -1,8 +1,10 @@
 from django.contrib import admin
-from .models import ChamaMembers, Chamas, Transactions, fieldID, TransactionTypes
+from . import models
 
-admin.site.register(ChamaMembers)
-admin.site.register(Chamas)
-admin.site.register(Transactions)
-admin.site.register(fieldID)
-admin.site.register(TransactionTypes)
+admin.site.register(models.ChamaMembers)
+admin.site.register(models.Chamas)
+admin.site.register(models.Transactions)
+admin.site.register(models.fieldID)
+admin.site.register(models.TransactionTypes)
+admin.site.register(models.Subscriptions)
+admin.site.register(models.SubscriptionTypes)

@@ -1,18 +1,18 @@
 from django.db import models
 import datetime
 
-#This is a table that holds only 3 records - The numbers that will help in assigning IDs
+#This is a table that holds only 4 records - The numbers that will help in assigning IDs
 #fields names are fixed, they should NEVER BE EDITED
 #currentNumber should not be edited manually
-#the field names are; 'transactionid, chamaid, memberid'
+#the field names are; 'transactionid, chamaid, memberid', 'subscriptionid'
 class fieldID(models.Model):
-	fieldName = models.CharField(primary_key = True, max_length = 13)
+	fieldName = models.CharField(primary_key = True, max_length = 15)
 	currentNumber = models.IntegerField(default = 0)
 
 	def __str__(self):
 		return self.fieldName
 
-#Functions that assign chamaID, memberID, and transactionID
+#Functions that assign chamaID, memberID, subscriptionID and transactionID
 def getNextID(fieldName):
 	lastID = fieldID.objects.filter(fieldName = fieldName).last()
 	lastID.currentNumber +=1
@@ -47,7 +47,16 @@ def generate_memberID():
 
 	return memberID
 
+def generate_SubscriptionID():
+	nextID = getNextID("subscriptionid")
+	subscriptionID = "CSS" + str(nextID).zfill(10)
+
+	print(subscriptionID)
+
+	return subscriptionID
+
 #A one column table that stores transaction types only
+#transaction types; merry-go-round, savings, development, fine
 class TransactionTypes(models.Model):
 	transactionType = models.CharField(primary_key = True, max_length = 30)
 
@@ -58,9 +67,8 @@ class TransactionTypes(models.Model):
 
 class Chamas(models.Model):
 	chamaID = models.CharField(primary_key = True, max_length = 15, default = generate_ChamaID)#add default value
-	chamaName = models.CharField(max_length = 50)
+	chamaName = models.CharField(max_length = 50, default = "CHAMA SMART GROUP")
 	#add repID here
-	subscription = models.CharField(max_length = 5)#trial, paid, default trial
 	regDate = models.DateTimeField(auto_now_add = True)
 	funds = models.IntegerField(default = 0)
 	
@@ -72,7 +80,7 @@ class ChamaMembers(models.Model):
 	firstName = models.CharField(max_length = 30)
 	secondName = models.CharField(max_length = 30)
 	chamaID = models.ForeignKey(Chamas, on_delete = models.CASCADE)
-	status = models.CharField(max_length = 8)#active, removed, default value of active
+	status = models.CharField(max_length = 8, default = "active")#active, removed, default value of active
 	
 	def __str__(self):
 		return self.memberID
@@ -86,3 +94,23 @@ class Transactions(models.Model):
 	
 	def __str__(self):
 		return self.transactionID
+
+#This one-column table will have fixed records
+#subscription types: paid, trial
+class SubscriptionTypes(models.Model):
+	subscriptionType = models.CharField(primary_key = True, max_length = 10)
+
+	def __str__(self):
+		return self.subscriptionType
+
+#This will be manually edited from the admin site when a chama pays for subscription
+class Subscriptions(models.Model):
+	subscriptionID = models.CharField(primary_key = True, max_length = 20, default = generate_SubscriptionID)
+	subscriptionType = models.ForeignKey(SubscriptionTypes, default = "trial", on_delete = models.CASCADE)
+	chamaID = models.ForeignKey(Chamas, on_delete = models.CASCADE)
+	startDate = models.DateTimeField(auto_now_add = True)
+	endDate = models.DateTimeField(default = datetime.datetime.now() + datetime.timedelta(30))
+	amount = models.IntegerField(default = 0)
+
+	def __str__(self):
+		return self.subscriptionID

@@ -1,0 +1,40 @@
+{% extends 'dashboard/dashboard.html' %}
+
+{% block title %} Members {% endblock title %}
+{% block mobile_title %}MEMBERSHIP{% endblock mobile_title %}
+
+{% block content %}
+
+	<div class= "add_record_row">
+		<a href = "{% url 'membersform' %}">Add New Member</a>
+	</div>
+	
+	<div class = "display_records_row">
+
+		<table class="info_table">
+			<tr>
+				<th>Member ID</th>
+				<th>Member Name</th>
+				<th>Actions</th>
+			</tr>
+
+			{% for member in members_list %}
+
+				<tr>
+					<td> {{ member.memberID }} </td>
+					<td> {{ member.firstName }} {{ member.secondName }}</td>
+				</tr>
+								
+				<tr>
+					<td></td>
+					<td></td>
+					<td><a href = "#">More Info</a> | <a style = "color: red;" href = "#">Remove</a></td>
+				</tr>
+
+			{% endfor %}
+
+		</table>
+
+	</div>
+
+{% endblock content %}

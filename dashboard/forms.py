@@ -4,7 +4,7 @@ from . import models
 class CreateUser(forms.ModelForm):
 	class Meta:
 		model = models.ChamaMembers
-		fields = ['firstName', 'secondName', 'chamaID']
+		fields = ['firstName', 'secondName']
 		labels = {'firstName':'First Name', 'secondName': 'Second Name'}
 
 class addTransaction(forms.ModelForm):

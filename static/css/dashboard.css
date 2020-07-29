@@ -6,8 +6,7 @@ body, html{
 }
 
 .main_container{
-	/* 100% of body width and height */
-	height: 100%;
+	height: 100%;/* of body */
 	width: 100%;
 }
 
@@ -15,7 +14,7 @@ body, html{
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 5%;/* 5% of main_container height and 100% width */
+	height: 5%;/* of main_container */
 	width: 100%;
 	background-color: #03ddff;
 }
@@ -61,28 +60,28 @@ body, html{
 	flex-direction: row;
 	flex-wrap: wrap;
 	width: 100%;
-	height: 100%;/* 100% of content height */
+	height: 100%;/* of content height */
 }
 
 .content_column{
 	display: flex;
 	flex-direction: column;
 	flex: 50%;
-	width: 50%;/*50 % of content_row width*/
-	height: 100%; /*take 100% of content_row height */
+	width: 50%;/* of content_row */
+	height: 100%;
 	justify-content: flex-start;
 	align-items: center;
 }
 
 .info_container{
-	width: 90%;/*take 90% of column width*/
-	height: 50%;/*take 40% of column height*/
+	width: 90%;/* of column*/
+	height: 50%;
 	margin:10px 0 10px 0;
 }
 
 .info_content{
 	width: 100%;
-	height: 100%; /* 80% of info_container height */
+	height: 100%; /* of info_container */
 	background-color: #fff;
 	border-radius: 10px 10px 0 0;
 }
@@ -101,7 +100,7 @@ body, html{
 	display: flex;
 	justify-content: center;
 	background-color: #03ddff;
-	width: 100%; /* 100% of info_container width */
+	width: 100%; /* of info_container width */
 	height: 20%; 
 	margin: 0;
 	border-radius: 10px 10px 0 0;
@@ -134,25 +133,31 @@ body, html{
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	width: 100%; /*100% of content_row width*/
-	height: 30%; /*30% of content_row height*/
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 5%; /* of content_row */
+}
+
+.add_record_row a{
+	width: 400px;
+	height: 90%; /* of add_record_row*/
+	background-color: #03ddff;
+	text-decoration: none;
+	color: #fff;
+	text-align: center;
+	font-size: 30px;
 }
 
 .form_div{
 	display: flex;
 	flex-direction: row;
-	height: 100%; /*100% of add_records_row*/
-	width: 100%; /*100% of add_record_row width*/
+	height: 100%; /* of add_records_row*/
+	width: 100%;
 	justify-content: center;
 	align-items: center;
 }
 
-
-/* uncomment this just in case...
-.site_form{
-	height: 80%;
-	width: 80%; /*80% of form_div width*
-}*/
 
 .site_form input, select{
 	display: block;
@@ -177,8 +182,15 @@ body, html{
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
+	justify-content: center;
+	align-items: flex-start;
 	width: 100%;
-	height: 70%;
+	height: 95%; /* of content_row */
+}
+
+.table_div{
+	width: 100%;
+	height: 100%;
 }
 
 .display_records_row h1{
@@ -193,12 +205,6 @@ body, html{
 	color: #aaa;
 }
 
-
-/*
-.show_form_div{
-	height: 10%;
-	justify-content: center;
-}*/
 
 @media (max-width: 745px){
 
@@ -229,7 +235,7 @@ body, html{
 		justify-content: flex-start;
 		align-items: flex-start;
 		flex-direction: column;
-		width: 80%; /*width is 80 % of body */
+		width: 80%; /* of body */
 		height: 100%; /* height becomes 100% of main_container */
 		position: relative;
 		z-index: 1000;
@@ -242,7 +248,7 @@ body, html{
 	}
 
 	.dashboard_navbar a:hover{
-		width: 100%; /*width is 100% of navbar width */
+		width: 100%; /* of navbar */
 		color:#fff;
 		background-color: #03dddd;
 	}
@@ -251,8 +257,8 @@ body, html{
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		height: 10%;/* 10% of the navbar height */
-		width: 100%; /* 100% of the navbar width */
+		height: 10%;/* of the navbar */
+		width: 100%;
 		border-bottom: solid #ddd;
 		border-width: 2px;
 	}
@@ -276,7 +282,7 @@ body, html{
 	/*Style for chama_info*/
 	.content_column{
 		flex: 100%;
-		width: 100%; /* 100% of row */
+		width: 100%; /* of row */
 	}
 
 	/*styling for chamaMembership*/

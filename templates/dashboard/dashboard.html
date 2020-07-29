@@ -1,4 +1,6 @@
 {% load static %}
+{% load humanize %} {# to format how funds are displayed #}
+{% load tz %} {# to compare datetime, to determine subscription status #}
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,11 +48,6 @@
 								</tr>
 
 								<tr>
-									<td></td>
-									<td><a href = "#">Edit</a></td>
-								</tr>
-
-								<tr>
 									<td><h3>Members</h3></td>
 									<td>{{ members_count }}</td>
 								</tr>
@@ -67,7 +64,7 @@
 
 								<tr>
 									<td><h3>Representative</h3></td>
-									<td>Lilian Akinyi</td>
+									<td> Representative's Name</td>
 								</tr>
 							</table>
 
@@ -81,7 +78,7 @@
 							</div>
 							<table class = "info_table">
 								<tr>
-									<td><h2 class="funds">{{ chamaInfo.funds }}</h2></td>
+									<td><h2 class="funds">{{ chamaInfo.funds | intcomma }}</h2></td>
 								</tr>
 							</table>
 						</div>
@@ -99,24 +96,35 @@
 
 							<table class="info_table">
 								<tr>
-									<td><h3>Subscription</h3></td>
-									<td>{{ chamaInfo.subscription }}</td>
+									<td><h3>Subscription Type</h3></td>
+									<td>{{ subscription.subscriptionType }}</td>
 								</tr>
 
 								<tr>
-									<td></td>
-									<td><a href="#">More info</a></td>
+									<td><h3>Subscrption Status</h3></td>
+
+									{% if subscription.endDate.date > today.date%}
+									<td style = "color: green"> Active, {{ daysToExpiry.days }} days </td>
+									{% else %}
+									<td style="color: red"> Expired</td>
+									{% endif %}
+
 								</tr>
 
 								<tr>
-									<td><h3>Expiry</h3></td>
-									<td>2/2/2021</td>
+									<td><h3>Amount</h3></td>
+									<td>{{ subscription.amount }}</td>
 								</tr>
 
 								<tr>
-									<td></td>
-									<td><a href="#">view more</a></td>
-								</tr>								
+									<td> <h3>Start Date</h3></td>
+									<td>{{ subscription.startDate }}</td>
+								</tr>
+
+								<tr>
+									<td><h3>End Date</h3></td>
+									<td>{{ subscription.endDate }}</td>
+								</tr>							
 							</table>
 
 						</div>
@@ -139,7 +147,7 @@
 
 							<tr>
 								<td>{{ transaction.transactionType }}</td>
-								<td>{{ transaction.memberID.chamaID.chamaName }}</td>
+								<td>{{ transaction.memberID.firstName }}</td>
 								<td>{{ transaction.amount }}</td>
 								<td>{{ transaction.transactionDate }}</td>
 							</tr>
