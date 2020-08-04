@@ -1,0 +1,45 @@
+TECHNICAL DOCUMENTATION
+
+The chama registration page has 3 different forms; 
+
+ChamaForm - for filling chama related informtion. All fields except chamaName are filled automatically.
+SubscriptionForm - for filling the subscription choice of the chama - All fields are field automatically except subscriptionType
+CreateUserForm - for creating the User.
+
+However, these forms appear as one from the user's POV.
+
+During creation of an account, the following happens in the backend.
+User is placed in a group - "chama_admin".
+A subscription is created for the chama with default subscription as "trial" and chamaID as the one generated during creation of the account
+
+Generation of primary keys
+Chama Smart does not make use of automatically assigned primary keys. Primary keys are generated during creation of a record using functions within the models file.
+
+BUSINESS DOCUMENTATION
+
+Definition of terms used;
+
+Chama - the local name for investment groups. This word will be interchanged with investment group or just group throughout the documentation
+
+Business Model
+
+1.Subscriptions
+The main source of revenue for Chama Smart will be monthly group subscriptions. Each group with less than 20 members will be charged a fixed fee of ksh200 a month and each with members above 20, according to the following equation;
+
+	y = 5x + 100
+
+Where y is the amount chama smart charges, and is determined by x, the number of members in a group. 
+
+However, Chama Smart has a minimum subscription fee of ksh200 so the equation only applies to Chamas with members above 20.
+
+2. Manual Record Manipulation
+Chama Smart is built to have as few features as possible to maintain simplicity. Therefore, some functionalities like assigning roles are unavailable. However, database admins will be able to manipulate records on behalf of chamas at a fee. For example, changing the phone number of the Chama representative (the person who authenticates on behalf of the chama) will requiere a fee of ksh 50.
+
+Scalability
+Chama Smart is a scalable business. The revenue made will depend on the number of Chamas that are subscribed to the service. The more the groups, the more the revenue.
+
+Chama Smart's value
+The initial value of Chama Smart was determined by the amount of time taken by the founder to deliver MVP.
+Development of the Chama Smart Software began on Sunday, 19th July 2020. The software reached MVP on Tuesday, 4th August 2020 (17 days later). A MINIMUM of 8 hours a day went into building it. Working at $10/hr, the total development cost sums up to $1360 - that is Chama Smart's initital value.
+
+Investing in Chama Smart

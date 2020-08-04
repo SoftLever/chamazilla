@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 import datetime
 
 #This is a table that holds only 4 records - The numbers that will help in assigning IDs
@@ -66,8 +67,9 @@ class TransactionTypes(models.Model):
 #CSM, CSG, CST stand for Chama Smart Member, Group and Transaction successfully
 
 class Chamas(models.Model):
+	user = models.OneToOneField(User, on_delete = models.CASCADE)
 	chamaID = models.CharField(primary_key = True, max_length = 15, default = generate_ChamaID)#add default value
-	chamaName = models.CharField(max_length = 50, default = "CHAMA SMART GROUP")
+	chamaName = models.CharField(max_length = 50)
 	#add repID here
 	regDate = models.DateTimeField(auto_now_add = True)
 	funds = models.IntegerField(default = 0)
@@ -83,7 +85,7 @@ class ChamaMembers(models.Model):
 	status = models.CharField(max_length = 8, default = "active")#active, removed, default value of active
 	
 	def __str__(self):
-		return self.memberID
+		return self.firstName + ' ' + self.secondName
 
 class Transactions(models.Model):
 	transactionID = models.CharField(primary_key = True, max_length = 20, default = generate_TransactionID)
@@ -109,7 +111,7 @@ class Subscriptions(models.Model):
 	subscriptionType = models.ForeignKey(SubscriptionTypes, default = "trial", on_delete = models.CASCADE)
 	chamaID = models.ForeignKey(Chamas, on_delete = models.CASCADE)
 	startDate = models.DateTimeField(auto_now_add = True)
-	endDate = models.DateTimeField(default = datetime.datetime.now() + datetime.timedelta(30))
+	endDate = models.DateTimeField(default = datetime.datetime.now() + datetime.timedelta(7))
 	amount = models.IntegerField(default = 0)
 
 	def __str__(self):

@@ -64,7 +64,7 @@
 
 								<tr>
 									<td><h3>Representative</h3></td>
-									<td> Representative's Name</td>
+									<td> {{ chamaInfo.user.username }}</td>
 								</tr>
 							</table>
 
@@ -101,10 +101,10 @@
 								</tr>
 
 								<tr>
-									<td><h3>Subscrption Status</h3></td>
+									<td><h3>Subscription Status</h3></td>
 
 									{% if subscription.endDate.date > today.date%}
-									<td style = "color: green"> Active, {{ daysToExpiry.days }} days </td>
+									<td style = "color: green"> Active for {{ daysToExpiry }} days, {{ hoursToExpiry }} hours, {{ minutesToExpiry }} minutes</td>
 									{% else %}
 									<td style="color: red"> Expired</td>
 									{% endif %}
@@ -135,25 +135,37 @@
 							<div class = "info_title">
 								<h1>RECENT TRANSACTIONS</h1>
 							</div>
-					<table class = "info_table">
-						<tr>
-							<th>Type</th>
-							<th>Member</th>
-							<th>Amount</th>
-							<th>Time</th>
-						</tr>
+
+							{% if not transactions %}
+
+								<p style="color: red; text-align: center; font-size: 20px;">No Transactions yet</p>
+
+							{% else %}
+
+								<table class = "info_table">
+
+								<tr>
+									<th>Type</th>
+									<th>Member</th>
+									<th>Amount</th>
+									<th>Time</th>
+								</tr>
 	
-						{% for transaction in transactions %}
+								{% for transaction in transactions %}
 
-							<tr>
-								<td>{{ transaction.transactionType }}</td>
-								<td>{{ transaction.memberID.firstName }}</td>
-								<td>{{ transaction.amount }}</td>
-								<td>{{ transaction.transactionDate }}</td>
-							</tr>
+									<tr>
+										<td>{{ transaction.transactionType }}</td>
+										<td>{{ transaction.memberID.firstName }}</td>
+										<td>{{ transaction.amount }}</td>
+										<td>{{ transaction.transactionDate }}</td>
+									</tr>
 
-						{% endfor %}
-					</table>
+								{% endfor %}
+
+								</table>
+
+							{% endif %}
+
 						</div>
 					</div><!-- End of info_container-->
 				</div><!-- End of content_column -->
@@ -168,13 +180,6 @@
 
 
 <script type="text/javascript">
-	function updateContent(newtitle){
-		title = document.getElementById("page_title");
-		title.innerHTML = newtitle;
-		revealMobileNavbar()/*hide navbar after updating title*/
-	}/*The above function is a lame ass solution - But I'll leave it here just in
-	case django blocks don't work well enough for me*/
-
 	function revealMobileNavbar(){
 		navbar = document.getElementById("dashboard_navbar");
 		if (navbar.style.display != "flex"){
@@ -186,17 +191,26 @@
 	}/* Out of all the methods tried to switch between display flex and none, this 
 	was the most efficient*/
 
-	/* This function changes the margin of the navigation bar from 
-	mobile_title div (if in mobile view) so that the navbar covers it*/
+	function changeContentMargin(mobile_title){
+		dashboardNavbar = document.getElementById("dashboard_navbar");
+		newContentMargin = (-dashboardNavbar.offsetHeight + mobile_title).toString().concat("px");
+		document.getElementById("content").style.marginTop = newContentMargin;
+		console.log(newContentMargin);
+	}/* use this solution when it's perfectly working */
+
+	/* This function changes the margin of the navigation bar and content div from 
+	mobile_title div (if in mobile view) .The goal is to make navbar cover mobile_div
+	and content to be exactly below mobile view so that it's not pushed down by navbar*/
 	function changeNavbarMargin(){
 		mobile_title = document.getElementById("mobile_title");
 		if (mobile_title.style.display === "none"){
 			console.log("Large device");
 		}
 		else{
-			new_margin = (-mobile_title.offsetHeight).toString().concat("px");
-			console.log(new_margin);
-			document.getElementById("dashboard_navbar").style.marginTop = new_margin;
+			newNavbarMargin = (-mobile_title.offsetHeight).toString().concat("px");
+			console.log(newNavbarMargin);
+			document.getElementById("dashboard_navbar").style.marginTop = newNavbarMargin;
+			/*changeContentMargin(mobile_title.offsetHeight)*/
 		}
 	}
 

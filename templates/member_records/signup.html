@@ -7,9 +7,48 @@ Sign up
 {% block content %}
 
 <div class = "authdiv">
-	<!-- Google OAuth tutorial
-		https://developers.google.com/identity/sign-in/web/sign-in
-	-->
+
+	<div class="auth_title">
+		<h1>Register Your Chama</h1>
+	</div>
+
+	<div class="auth_form_div">
+
+		<form action = "#" method = "POST" class = "auth_form">
+			{% csrf_token %}
+			{{ form.username }}
+			{{ chamaForm.chamaName }}
+			{{ subscriptionForm.subscriptionType }}
+			<label>Note: A Trial subscription will expire in 7 days</label>
+			{{ form.password1 }}
+			{{ form.password2 }}
+			<input type="submit" value="Register">
+		</form>
+
+	</div>
+
+	<div class = "message_div">
+
+		{{ form.errors }}
+		{{ chamaForm.errors }}
+		{{ subscriptionForm.errors }}
+
+	</div>
+
 </div>
 
 {% endblock content %}
+
+{% block javascript %}
+<script type="text/javascript">
+	phone = document.getElementById("id_username");
+	password1 = document.getElementById("id_password1");
+	password2 = document.getElementById("id_password2");
+	chamaName = document.getElementById("id_chamaName");
+	subscriptionType = document.getElementById("id_subscriptionType");
+	phone.placeholder = "Phone Number";
+	chamaName.placeholder = "Name of Chama";
+	password1.placeholder = "Password";
+	password2.placeholder = "Password Again";
+</script>
+{% endblock javascript %}

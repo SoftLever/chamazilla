@@ -11,26 +11,31 @@
 
 	<div class = "display_records_row">
 
-		<table class="info_table">
-			<tr>
-				<th>Transaction Type</th>
-				<th>Member Name</th>
-				<th>Amount</th>
-				<th>Date</th>
-			</tr>
+		{% if not transactions %}
+			<h1 style="color: red; text-align: center;">No Transactions yet</h1>
+		{% else %}
 
-			{% for transaction in transactions %}
-
+			<table class="info_table">
 				<tr>
-					<td> {{ transaction.transactionType }} </td>
-					<td> {{ transaction.memberID.firstName }} {{ transaction.memberID.secondName }}</td>
-					<td> {{ transaction.amount }}</td>
-					<td> {{ transaction.transactionDate }}</td>
+					<th>Transaction Type</th>
+					<th>Member Name</th>
+					<th>Amount</th>
+					<th>Date</th>
 				</tr>
 
-			{% endfor %}
+				{% for transaction in transactions %}
 
-		</table>
+					<tr>
+						<td> {{ transaction.transactionType }} </td>
+						<td> {{ transaction.memberID.firstName }} {{ transaction.memberID.secondName }}</td>
+						<td> {{ transaction.amount }}</td>
+						<td> {{ transaction.transactionDate }}</td>
+					</tr>
+
+				{% endfor %}
+
+			</table>
+		{% endif %}
 
 	</div>
 

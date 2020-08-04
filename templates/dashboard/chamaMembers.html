@@ -11,9 +11,13 @@
 	
 	<div class = "display_records_row">
 
+		{% if not members_list %}
+			<h1 style="color:red; text-align: center;">No members yet</h1>
+		{% else %}
+
 		<table class="info_table">
 			<tr>
-				<th>Member ID</th>
+				<th class = "hide_on_mobile">Member ID</th>
 				<th>Member Name</th>
 				<th>Actions</th>
 			</tr>
@@ -21,12 +25,12 @@
 			{% for member in members_list %}
 
 				<tr>
-					<td> {{ member.memberID }} </td>
+					<td class = "hide_on_mobile"> {{ member.memberID }} </td>
 					<td> {{ member.firstName }} {{ member.secondName }}</td>
 				</tr>
 								
 				<tr>
-					<td></td>
+					<td class = "hide_on_mobile"></td>
 					<td></td>
 					<td><a href = "#">More Info</a> | <a style = "color: red;" href = "#">Remove</a></td>
 				</tr>
@@ -34,6 +38,7 @@
 			{% endfor %}
 
 		</table>
+		{% endif %}
 
 	</div>
 

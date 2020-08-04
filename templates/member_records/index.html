@@ -57,7 +57,7 @@
 	</div>
 
 	<div class = "signup_column">
-		{% if 2 == 2 %}
+		{% if user.is_authenticated %}
 			<!--if user is authenticated -->
 			<h2> Thank you for staying connected with Chama Smart</h2>
 			<a href = "{% url 'dashboard' %}"><button>Go to Dashboard</button></a>

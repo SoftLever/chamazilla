@@ -1,13 +1,15 @@
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
-from member_records.views import index, signup
+from member_records.views import index, signup, loginpage, logoutUser
 from dashboard.views import dashboard, members, transactions, loans, membersform, transactionsform
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^$', index, name = "index"),
     url(r'^signup$', signup, name = "signup"),
+    url(r'^login$', loginpage, name = "login"),
+    url(r'^logout$', logoutUser, name = "logout"),
     url(r'^dashboard/$', dashboard, name = "dashboard"),
     url(r'^members$', members, name = "members"),
     url(r'^membersform$', membersform, name = "membersform"),

@@ -63,7 +63,7 @@ body, html{
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	height: 95%; /*row occupies 95% of the flex-container height*/
+	height: 100%; /*of flex-container height*/
 	align-items: center;
 	justify-content: center;
 }
@@ -144,25 +144,6 @@ body, html{
 	border: none;
 }
 
-.authdiv{
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 500px;
-	height:80%; /*authdiv occupies 80% of the row div*/
-	border-radius: 10px 10px 10px 10px;
-	background-color: #ddd;.
-}
-
-.authdiv button{
-	width: 80%;
-	height: 50px;
-}
-
-.authdiv button:hover{
-	cursor: pointer;
-}
-
 .footer{
 	display: flex;
 	justify-content: center;
@@ -187,10 +168,58 @@ body, html{
 	color: #ddd;
 }
 
-table, td, th{
-	border: solid;
-	border-color: green;
-	border-collapse: collapse;
+/*Style for signup/login pages*/
+.authdiv{
+	width: 500px;
+	height:80%; /*of row div*/
+	border-radius: 10px 10px 10px 10px;
+	background-color: #ddd;
+}
+
+.auth_title{
+	margin-top: 0;
+	text-align: center;
+	width: 100%;
+	height: 5%;/*of authdiv*/
+	font-size: 1em;
+}
+
+.auth_form_div{
+	height: 70%;/* of authdiv*/
+}
+
+.auth_form_div form{
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;/*of authdiv*/
+	height: 100%;
+}
+
+.auth_form_div input, select{
+	margin: 0 auto 0 auto;
+	font-size: 18px;
+	width: 80%; /*of form*/
+	height: 30px;
+}
+
+.auth_form_div label{
+	width: 80%;
+	margin: 0px auto 5px auto;
+}
+
+.auth_form_div label{
+	color: green;
+}
+
+
+.message_div{
+	width: 100%;
+	height: 20%;/*of authdiv*/
+}
+
+.message_div p{
+	text-align: center;
+	color: red;
 }
 
 /*Style for mobile devices */
@@ -218,5 +247,10 @@ table, td, th{
 
 	.navbar a:active{
 		border-bottom: solid black;
+	}
+
+	/*signup/login pages style*/
+	.authdiv{
+		width: 90%;
 	}
 }

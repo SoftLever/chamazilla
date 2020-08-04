@@ -1,0 +1,36 @@
+{% extends 'member_records/base.html' %}
+
+{% block title %}
+Log In
+{%endblock title %}
+
+{% block content %}
+
+<div class = "authdiv">
+
+	<div class="auth_title">
+		<h1>Chama Smart Log In</h1>
+	</div>
+
+	<div class="auth_form_div">
+
+		<form action = "#" method = "POST" class = "auth_form">
+			{% csrf_token %}
+			<input type = "text" name = "phone" placeholder = "Phone">
+			<input type = "password" placeholder="Password" name = "password">
+			<input type = "submit" value="Log In">
+		</form>
+
+	</div>
+
+	<div class = "message_div">
+		{% for message in messages%}
+
+			<p>{{ message }}</p>
+
+		{% endfor %}
+	</div>
+
+</div>
+
+{% endblock content %}
