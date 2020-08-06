@@ -62,8 +62,7 @@ Deploying Chama Smart to live server
 
 3) Settings.py
 
-	- Allow host to ALLOWED_HOSTS
-	- Edit the DATABASES dictionary
+Change DJANGO_SETTINGS_MODULE to settings.production
 
 
 BUSINESS DOCUMENTATION
