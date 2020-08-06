@@ -7,7 +7,7 @@ import datetime
 #currentNumber should not be edited manually
 #the field names are; 'transactionid, chamaid, memberid', 'subscriptionid'
 class fieldID(models.Model):
-	fieldName = models.CharField(primary_key = True, max_length = 15)
+	fieldName = models.CharField(primary_key = True, max_length = 20)
 	currentNumber = models.IntegerField(default = 0)
 
 	def __str__(self):

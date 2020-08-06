@@ -15,6 +15,57 @@ A subscription is created for the chama with default subscription as "trial" and
 Generation of primary keys
 Chama Smart does not make use of automatically assigned primary keys. Primary keys are generated during creation of a record using functions within the models file.
 
+
+Deploying Chama Smart to live server
+
+1) Install all dependencies in the requirements file
+
+2) Install mysql client on the server - ubuntu commands given
+	sudo apt-get install mysql-server
+	sudo mysql_secure_installation utility
+	sudo systemctl start mysql
+	sudo mysql -u root -p
+	password: rootPWD@67
+
+	If database has not been created;
+	- Delete all contents in migrations folder except "__init__.py"
+	- CREATE DATABASE CS_DB;
+
+	python manage.py makemigrations
+	python manage.py migrate
+
+	python manage.py createsuperuser
+
+	Go to admin.py and add the following;
+
+	fieldIDs
+	- subscriptionid
+	- transactionid
+	- memberid
+	- chamaid
+
+	subscription types
+	- trial
+	- paid
+
+	transaction types
+	- savings
+	- merry-go-round
+	- fine
+	- development
+	- withdrawal
+
+	Groups
+	- CS_employee
+	- chama_admin
+	- chama_member
+
+3) Settings.py
+
+	- Allow host to ALLOWED_HOSTS
+	- Edit the DATABASES dictionary
+
+
 BUSINESS DOCUMENTATION
 
 Definition of terms used;
