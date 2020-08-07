@@ -1,0 +1,99 @@
+[
+	{
+		"model": "dashboard.fieldID",
+		"fields": {
+			"fieldName": "subscriptionid"
+		}
+	},
+
+	{
+		"model": "dashboard.fieldID",
+		"fields":{
+			"fieldName": "transactionid"
+		}
+	},
+
+	{
+		"model": "dashboard.fieldID",
+		"fields":{
+			"fieldName": "memberid"
+		}
+	},
+
+	{
+		"model": "dashboard.fieldID",
+		"fields":{
+			"fieldName": "chamaid"
+		}
+	},
+
+	{
+		"model": "dashboard.SubscriptionTypes",
+		"fields": {
+			"subscriptionType": "trial"
+		}
+	},
+
+	{
+		"model": "dashboard.SubscriptionTypes",
+		"fields": {
+			"subscriptionType": "paid"
+		}
+	},
+
+	{
+		"model": "dashboard.TransactionTypes",
+		"fields": {
+			"transactionType": "savings"
+		}
+	},
+
+	{
+		"model": "dashboard.TransactionTypes",
+		"fields": {
+			"transactionType": "merry-go-round"
+		}
+	},
+
+	{
+		"model": "dashboard.TransactionTypes",
+		"fields": {
+			"transactionType": "fine"
+		}
+	},
+
+	{
+		"model": "dashboard.TransactionTypes",
+		"fields": {
+			"transactionType": "development"
+		}
+	},
+
+	{
+		"model": "dashboard.TransactionTypes",
+		"fields": {
+			"transactionType": "withdrawal"
+		}
+	},
+
+	{
+		"model": "auth.group",
+		"fields":{
+			"name":"chama_admin"
+		}
+	},
+
+	{
+		"model": "auth.group",
+		"fields":{
+			"name":"chama_member"
+		}
+	},
+
+	{
+		"model": "auth.group",
+		"fields":{
+			"name":"CS_employee"
+		}
+	}
+]

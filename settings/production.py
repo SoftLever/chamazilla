@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'chama_database.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'CS_DB',
+        'NAME': 'technicollins$CS_DB',
         'USER': 'technicollins',
         'PASSWORD': 'mysql_password',
         'HOST': 'technicollins.mysql.pythonanywhere-services.com',

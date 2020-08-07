@@ -1,0 +1,89 @@
+TECHNICAL DOCUMENTATION
+
+The chama registration page has 3 different forms; 
+
+ChamaForm - for filling chama related informtion. All fields except chamaName are filled automatically.
+SubscriptionForm - for filling the subscription choice of the chama - All fields are field automatically except subscriptionType
+CreateUserForm - for creating the User.
+
+However, these forms appear as one from the user's POV.
+
+During creation of an account, the following happens in the backend.
+User is placed in a group - "chama_admin".
+A subscription is created for the chama with default subscription as "trial" and chamaID as the one generated during creation of the account
+
+Generation of primary keys
+Chama Smart does not make use of automatically assigned primary keys. Primary keys are generated during creation of a record using functions within the models file.
+
+Initial data 
+Chama Smart relies on predefined data for the database to work properly. This data is stored in JSON format as fixtures and added in fresh installs of Chama Smart app to a live server
+
+	fieldIDs
+	- subscriptionid
+	- transactionid
+	- memberid
+	- chamaid
+
+	subscription types
+	- trial
+	- paid
+
+	transaction types
+	- savings
+	- merry-go-round
+	- fine
+	- development
+	- withdrawal
+
+	Groups
+	- CS_employee
+	- chama_admin
+	- chama_member
+
+
+DEPLOYING CHAMA SMART TO A LIVE SERVER FOR THE FIRST TIME
+
+Tip; if something doesn't work after making changes, try restarting the app first before trying other solutions
+
+1) Settings.py
+
+Change DJANGO_SETTINGS_MODULE in manage.py to settings.production
+
+2) Push changes to Github
+
+3) go to python anywhere and clone the repo
+- git clone https://github.com/TechniCollins/chama_database.git
+
+4) Create a venv for project
+- cd to envs folder
+- python3 -m virtualenv chama_db
+- source chama_db/bin/activate
+
+5) Install all dependencies
+- pip install -r requirements.txt
+
+6) Create web app with same name as repo and choose manual config
+
+- source code; /home/technicollins/chama_database
+- working directory; /home/technicollins/
+- WSGI configuration: replace code with the code in wsgiConfig.py
+- virtualenv: /home/technicollins/envs/chama_db
+
+- static files; /home/technicollins/chama_database/static
+- media; 	/home/technicollins/chama_database/media
+
+7) Prepare Database
+Create a database called CS_DB on pythonanywhere
+
+- DO NOT makemigrations in production
+- python3 manage.py migrate
+
+8) Create superuser
+- python3 manage.py createsuperuser
+- password; pwd_2020
+
+9) Load default data from fixture file
+
+- python manage.py loaddata dashboard_fixtures.json
+
+We're live!!!

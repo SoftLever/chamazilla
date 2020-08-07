@@ -1,0 +1,14 @@
+There are very few investment group software in existence. The ones that are currently available have overwhelming features that, honestly, don't add much value to users.
+
+The truth is, most investment groups have very simple needs;
+
+To manage members - that is, simply addition and removal
+To record transactions made by members
+And... To issue loans and receive repayments
+
+Recording a transaction or a new member is as easy as opening a book and writing in it. And retrieval is as easy as flipping a few pages. Chama Smart aims to maintain that simplicity. And the way we're doing this is by making the SW minimal.
+
+Why is it so important to maintain simplicity?
+Most, if not all of the local investment groups are unofficial, and made up of members with all levels of education. But the truth is, not all can wrap their heads around making use of complex software. However, almost anyone can type into their smartphones and read basic text. 
+
+And that's what Chama Smart is all about. Our aim is to help everyone manage their chamas easily using technology, without having to go through a steep learning curve.
