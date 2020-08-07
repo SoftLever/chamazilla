@@ -25,7 +25,7 @@ SECRET_KEY = 'onpdc$_ywl#+&f(kc03tq-g^2-0bv+$*7#g(2b!htxm$fjpnvi'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['technicollins.pythonanywhere.com']
 
 
 # Application definition
@@ -80,9 +80,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'CS_DB',
-        'USER': 'root',
-        'PASSWORD': 'rootPWD@67',
-        'HOST': 'localhost',
+        'USER': 'technicollins',
+        'PASSWORD': 'mysql_password',
+        'HOST': 'technicollins.mysql.pythonanywhere-services.com',
         'PORT': '3306',
     }
 }

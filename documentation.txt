@@ -64,6 +64,27 @@ Deploying Chama Smart to live server
 
 Change DJANGO_SETTINGS_MODULE to settings.production
 
+4) Push changes to pythonanywhere
+
+Create and activate virtualenv
+-cd to envs folder
+-python3 -m virtualenv chama_db
+-source chama_db/bin/activate
+
+Clone repo from Github
+-git clone https://github.com/TechniCollins/chama_smart.git
+-cd chama_smart
+
+Install required packages inside env
+-pip install -r requirements.txt
+
+Create django web app
+-Choose manual config
+-source code: /home/technicollins/chama_smart
+-add virtualenv: /home/technicollins/envs/chama_db
+-wsgi file - replace existing code with your wsgi configs
+-working directory: /home/technicollins/chama_smart
+-static files path: /home/technicollins/chama_smart/static
 
 BUSINESS DOCUMENTATION
 
