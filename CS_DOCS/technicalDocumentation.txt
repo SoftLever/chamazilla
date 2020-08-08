@@ -45,7 +45,7 @@ DEPLOYING CHAMA SMART TO A LIVE SERVER FOR THE FIRST TIME
 
 Tip; if something doesn't work after making changes, try restarting the app first before trying other solutions
 
-1) Settings.py
+1) Manage.py
 
 Change DJANGO_SETTINGS_MODULE in manage.py to settings.production
 
@@ -69,21 +69,38 @@ Change DJANGO_SETTINGS_MODULE in manage.py to settings.production
 - WSGI configuration: replace code with the code in wsgiConfig.py
 - virtualenv: /home/technicollins/envs/chama_db
 
-- static files; /home/technicollins/chama_database/static
-- media; 	/home/technicollins/chama_database/media
+7) Static files
+URL; /static/
+PATH; /home/technicollins/chama_database/static/
 
-7) Prepare Database
+Run this to keep all static files together in the dir specified in STATIC_ROOT
+
+- python3 manage.py collectstatic
+
+8) Prepare Database
 Create a database called CS_DB on pythonanywhere
 
 - DO NOT makemigrations in production
 - python3 manage.py migrate
 
-8) Create superuser
+9) Create superuser
 - python3 manage.py createsuperuser
 - password; pwd_2020
 
-9) Load default data from fixture file
+10) Load default data from fixture file
 
 - python manage.py loaddata dashboard_fixtures.json
 
 We're live!!!
+
+SUBSEQUENT DEPLOYMENTS / DEPLOYING UPDATES
+
+1) Change DJANGO_SETTINGS_MODULE in manage.py to settings.production
+
+2) push changes to github
+
+3) pull changes to python anywhere
+-git pull origin master
+
+4) if any static file has changed;
+- python manage.py collectstatic
