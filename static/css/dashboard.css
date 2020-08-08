@@ -5,6 +5,10 @@ body, html{
 	box-sizing: border-box;
 }
 
+body{
+	background-color: #f7f5f6;
+}
+
 .main_container{
 	height: 100%;/* of body */
 	width: 100%;
@@ -52,7 +56,6 @@ body, html{
 .content{
 	height: 95%;
 	width: 100%;
-	background-color: #f7f5f6;
 }
 
 .content_row{
@@ -219,7 +222,7 @@ body, html{
 		justify-content: flex-start;
 		align-items: center;
 		width: 100%;
-		height: 5%;
+		height: 60px;
 		background-color: #03ddff;
 		color:#fff;
 	}
@@ -232,6 +235,7 @@ body, html{
 
 	.content{
 		margin-top: 0px;/*This will be changed by js*/
+		height: auto;
 	}
 
 	.dashboard_navbar{
@@ -290,7 +294,19 @@ body, html{
 		width: 100%; /* of row */
 	}
 
+	.info_title h1{
+		font-size: 1.3em;
+	}
+
+	.funds{
+		font-size: 3em;
+	}
+
 	/*styling for chamaMembership*/
+	.add_record_row a{
+		margin-top: 20px;
+		width: 80%;
+	}
 
 	.site_form{
 		width: 100%;

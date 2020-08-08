@@ -13,7 +13,6 @@ The main source of revenue for Chama Smart will be monthly group subscriptions. 
 
 Where y is the amount chama smart charges, and is determined by x, the number of members in a group. 
 
-However, Chama Smart has a minimum subscription fee of ksh200 so the equation only applies to Chamas with members above 20.
 
 2. Manual Record Manipulation
 Chama Smart is built to have as few features as possible to maintain simplicity. Therefore, some functionalities like assigning roles are unavailable. However, database admins will be able to manipulate records on behalf of chamas at a fee. For example, changing the phone number of the Chama representative (the person who authenticates on behalf of the chama) will requiere a fee of ksh 50.

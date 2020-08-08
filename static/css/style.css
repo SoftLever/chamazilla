@@ -5,10 +5,13 @@ body, html{
 	box-sizing: border-box;
 }
 
+body{
+	background-color: #f7f5f6;
+}
+
 .flex_container{
 	width: 100%;
 	height: 90%; /*occupies 90% of the total body height*/
-	background-color: #f7f5f6;
 }
 
 .flex_container h1, h2{
@@ -28,7 +31,7 @@ body, html{
 .flex_container p{
 	font-family:  Impact, Charcoal, sans-serif;
 	font-size: 18px;
-	color: #ddd;
+	color: #2e2d2d;
 }
 
 .navbar{
@@ -241,6 +244,15 @@ body, html{
 		width:100%;
 	}
 
+	.navbar{
+		height: 60px;
+	}
+
+	.row{
+		height: auto;
+		padding-top: 60px;
+	}
+
 	.navbar a{
 		margin:auto;
 	}
@@ -249,8 +261,25 @@ body, html{
 		border-bottom: solid black;
 	}
 
+	.signup_column a{
+		width: 100%;
+	}
+
+	.signup_column button{
+		width: 100%;
+		border-radius: 0 0 0 0;
+	}
+
 	/*signup/login pages style*/
 	.authdiv{
+		margin-top: 20px;
 		width: 90%;
+	}
+
+	.auth_form_div input, select{
+		margin: 15px auto 15px auto;
+		font-size: 18px;
+		width: 80%; /*of form*/
+		height: 30px;
 	}
 }

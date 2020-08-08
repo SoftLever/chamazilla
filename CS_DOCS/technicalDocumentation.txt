@@ -70,12 +70,16 @@ Change DJANGO_SETTINGS_MODULE in manage.py to settings.production
 - virtualenv: /home/technicollins/envs/chama_db
 
 7) Static files
-URL; /static/
-PATH; /home/technicollins/chama_database/static/
 
 Run this to keep all static files together in the dir specified in STATIC_ROOT
 
 - python3 manage.py collectstatic
+
+URL; /static/
+PATH; /home/technicollins/chama_database/static/
+
+URL; /static/
+PATH; /home/technicollins/chama_database/staticfiles/admin
 
 8) Prepare Database
 Create a database called CS_DB on pythonanywhere
