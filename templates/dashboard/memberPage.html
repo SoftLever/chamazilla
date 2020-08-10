@@ -1,0 +1,28 @@
+<h2>Member Info</h2>
+
+<p>Name;	{{ userInfo.user.first_name }} {{ userInfo.last_name }} </p>
+<p>Phone;	{{ userInfo.user.username }}</p>
+<p>Role;	{{ userGroup }} </p>
+
+<h2>Transactions;</h2>
+
+<table>
+	
+
+	<th>
+		<td> Type </td>
+		<td> Amount </td>
+		<td> Date </td>
+	</th>
+
+	{% for transaction in transactions %}
+
+		<tr>
+			<td> {{ transaction.transactionType }}</td>
+			<td> {{ transaction.amount}} </td>
+			<td> {{ transaction.transactionDate }} </td>
+		</tr>
+
+	{% endfor %}
+
+</table>

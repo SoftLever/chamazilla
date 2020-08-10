@@ -27,7 +27,7 @@
 
 					<tr>
 						<td> {{ transaction.transactionType }} </td>
-						<td> {{ transaction.memberID.firstName }} {{ transaction.memberID.secondName }}</td>
+						<td> {{ transaction.memberID.user.first_name }} {{ transaction.memberID.user.last_name }}</td>
 						<td> {{ transaction.amount }}</td>
 						<td> {{ transaction.transactionDate }}</td>
 					</tr>

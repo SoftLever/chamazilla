@@ -1,9 +1,20 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from .models import ChamaMembers, Transactions, Chamas, Subscriptions
 from . import forms
+
+#for confirming deletion of users
+from django.contrib import messages
+
 from django.contrib.auth.decorators import login_required
 from dashboard.decorators import userNotAuthenticated, userAuthenticated
+
+#For handling member information
+from django.contrib.auth.models import User
+
+#To place chama members into their group
+from django.contrib.auth.models import Group
+
 import datetime
 import math
 
@@ -13,14 +24,10 @@ def dashboard(request):
 	session_chamaID = request.user.chamas.chamaID
 	#for the transactions div
 	transactions = Transactions.objects.filter(memberID__chamaID = session_chamaID).order_by("-transactionDate")[:5]
-	if not transactions:
-		print("no records match")
-	else:
-		print("some records match")
 
-	#for the basic info div
-	members_count = ChamaMembers.objects.filter(chamaID = session_chamaID).count()
-	chamaInfo = Chamas.objects.filter(chamaID = session_chamaID).last()
+	#Get only members who match the chama logged in and are active
+	members_count = ChamaMembers.objects.filter(chamaID = session_chamaID, user__is_active = True).count()
+	chamaInfo = request.user.chamas
 
 	#for the subscription div
 	#get the last subscription because it's the relevant one
@@ -52,7 +59,7 @@ def transactionsform(request):
 			print(instance.amount)
 
 			#update the total funds of the chama
-			chamaInfo = Chamas.objects.filter(chamaID = session_chamaID).last()
+			chamaInfo = request.user.chamas
 			if str(instance.transactionType) == "withdrawal":
 				chamaInfo.funds -= instance.amount
 			else:
@@ -69,31 +76,55 @@ def transactionsform(request):
 @userAuthenticated(allowed_roles = ['chama_admin'])
 def membersform(request):
 	session_chamaID = request.user.chamas.chamaID
-	form = forms.CreateUser()
-	context = {'form': form}
 
 	if request.method == 'POST':
-		form = forms.CreateUser(request.POST)
-		if form.is_valid():
-			instance = form.save(commit = False)
-			instance.chamaID = Chamas(chamaID = session_chamaID)#reference to a chama
-			instance.save()
-			print("New member added")
-			#redirect('dashboard/members')
-			return HttpResponseRedirect('members')
+		username = request.POST.get('phone')
+		#password defaults to the phone number given
+		password = username
+		first_name = request.POST.get('first_name')
+		last_name = request.POST.get('last_name')
 
-	return render(request, 'dashboard/membersForm.html', context)
+		newMember = User.objects.create_user(username, password = password, first_name = first_name, last_name = last_name)
+		
+		#add the user to chama member group
+		group = Group.objects.get(name = "chama_member")
+		newMember.groups.add(group)
+
+		newMemberExtension = ChamaMembers(user = newMember, chamaID = Chamas(chamaID = session_chamaID))
+
+		newMemberExtension.save()
+		return HttpResponseRedirect('members')
+
+	return render(request, 'dashboard/membersForm.html')
 
 #This view displays all chama members of the authenticated chama
 @login_required(login_url = 'login')
 @userAuthenticated(allowed_roles = ['chama_admin'])
 def members(request):
 	session_chamaID = request.user.chamas.chamaID
-	members_list = ChamaMembers.objects.filter(chamaID = session_chamaID).order_by("-memberID")
+	members_list = ChamaMembers.objects.filter(chamaID = session_chamaID, user__is_active = True).order_by("-memberID")
 
 	context = {'members_list': members_list}
 
 	return render(request, 'dashboard/chamaMembers.html', context)
+
+#Member deletion view
+@login_required(login_url = 'login')
+@userAuthenticated(allowed_roles = ['chama_admin'])
+def deleteUser(request, chamaID = None, username = None):
+	#we get username and their chama from urls
+	session_chamaID = request.user.chamas.chamaID
+
+	#to ensure a chama admin can disable only their members
+	if session_chamaID == chamaID:
+		user = User.objects.get(username = username)
+		user.is_active = False
+		user.save()
+		messages.success(request, user.first_name + ' has been removed from ' + request.user.chamas.chamaName)
+	else:
+		messages.warning(request, 'Member does not exist')
+
+	return HttpResponseRedirect('/members')
 
 #This view displays all transactions of the authenticated chama
 @login_required(login_url = 'login')
@@ -110,3 +141,25 @@ def transactions(request):
 @userAuthenticated(allowed_roles = ['chama_admin'])
 def loans(request):
 	return render(request, 'dashboard/loans.html')
+
+#This view displays individual chama member information
+#Should be accessible to the relevant member only and their admin
+@login_required(login_url = 'login')
+@userAuthenticated(allowed_roles = ['chama_member', 'chama_admin'])
+def memberPage(request, username =None):
+	context = {}
+	userInfo = ChamaMembers.objects.get(user__username = username)
+	print(userInfo.chamaID.chamaName)
+
+	#if authorized member or authorized admin
+	if request.user.username == username or request.user.username == userInfo.chamaID.user.username:
+		userGroup = userInfo.user.groups.all()[0]
+
+		#Show the user role without underscores
+		userGroup = userGroup.name.replace("_", " ")
+		transactions = Transactions.objects.filter(memberID = userInfo)
+		context = {"userInfo": userInfo, "userGroup": userGroup, "transactions": transactions}
+	else:
+		return HttpResponse('You are not authorized to view this page')
+
+	return render(request, 'dashboard/memberPage.html', context)

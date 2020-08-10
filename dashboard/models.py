@@ -78,14 +78,12 @@ class Chamas(models.Model):
 		return self.chamaID
 
 class ChamaMembers(models.Model):
+	user = models.OneToOneField(User, on_delete = models.CASCADE)
 	memberID = models.CharField(primary_key = True, max_length = 15, default = generate_memberID)
-	firstName = models.CharField(max_length = 30)
-	secondName = models.CharField(max_length = 30)
 	chamaID = models.ForeignKey(Chamas, on_delete = models.CASCADE)
-	status = models.CharField(max_length = 8, default = "active")#active, removed, default value of active
 	
 	def __str__(self):
-		return self.firstName + ' ' + self.secondName
+		return self.user.first_name + ' ' + self.user.last_name
 
 class Transactions(models.Model):
 	transactionID = models.CharField(primary_key = True, max_length = 20, default = generate_TransactionID)

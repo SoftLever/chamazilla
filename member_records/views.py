@@ -58,7 +58,14 @@ def loginpage(request):
 
 		if user is not None:
 			login(request, user)
-			return redirect('dashboard')
+			#redirect user depending on role
+			if user.groups.all()[0].name == "chama_admin":
+				return redirect('dashboard')
+			elif user.groups.all()[0].name == "chama_member":
+				return redirect('memberpage/%s/' % user.username)
+			else:
+				#if user doesn't belong to any group, meme them
+				return redirect('https://bit.ly/2PANTtD')
 		else:
 			messages.info(request, 'Username or password is incorrect')
 

@@ -7,9 +7,15 @@
 	<div class = "form_div" id = "form_div">
 		<form class = "site_form" action = "#" method="POST">
 			{% csrf_token %}
-			{{ form }}
+			<label>Phone Number : This will be the member's default password</label>
+			<input type="text" name="phone">
+			<label>First Name</label>
+			<input type="text" name="first_name">
+			<label>Last Name</label>
+			<input type="text" name="last_name">
 			<input type="submit" value="Add Member" class="submit">
 		</form>
+		{{ form.errors }}
 	</div>
 
 {% endblock content %}

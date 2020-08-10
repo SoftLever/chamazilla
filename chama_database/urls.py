@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
 from member_records.views import index, signup, loginpage, logoutUser
-from dashboard.views import dashboard, members, transactions, loans, membersform, transactionsform
+from dashboard.views import dashboard, members, transactions, loans, membersform, transactionsform, memberPage, deleteUser
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -16,4 +16,6 @@ urlpatterns = [
     url(r'^transactions$', transactions, name = "transactions"),
     url(r'^transactionsform$', transactionsform, name = "transactionsform"),
     url(r'^loans$', loans, name = "loans"),
+    url(r'^memberpage/(?P<username>[0-9]+)/$', memberPage, name = "memberpage"),
+    url(r'^delete/(?P<chamaID>\w+)/(?P<username>[0-9]+)/$', deleteUser, name = "delete"),
 ]
