@@ -255,10 +255,7 @@ body{
 
 	.navbar a{
 		margin:auto;
-	}
-
-	.navbar a:active{
-		border-bottom: solid black;
+		font-size: 17px;
 	}
 
 	.signup_column a{

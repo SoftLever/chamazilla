@@ -33,6 +33,10 @@ Sign up
 		{{ chamaForm.errors }}
 		{{ subscriptionForm.errors }}
 
+		{% for message in messages%}
+			<p>{{ message }}</p>
+		{% endfor %}
+
 	</div>
 
 </div>

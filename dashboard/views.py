@@ -15,6 +15,9 @@ from django.contrib.auth.models import User
 #To place chama members into their group
 from django.contrib.auth.models import Group
 
+#for validations
+from .formvalidations import phoneValidation
+
 import datetime
 import math
 
@@ -53,6 +56,12 @@ def transactionsform(request):
 	form = forms.addTransaction(session_chamaID)
 	context = {'form': form}
 	if request.method == 'POST':
+
+		#check if the amount is valid
+		if int(request.POST.get('amount')) < 0:
+			messages.warning(request, "Amount must be greater than 0")
+			return HttpResponseRedirect('transactionsform')
+
 		form = forms.addTransaction(session_chamaID, data = request.POST)
 		if form.is_valid():
 			instance = form.save(commit = False)
@@ -79,20 +88,50 @@ def membersform(request):
 
 	if request.method == 'POST':
 		username = request.POST.get('phone')
-		#password defaults to the phone number given
 		password = username
 		first_name = request.POST.get('first_name')
 		last_name = request.POST.get('last_name')
 
-		newMember = User.objects.create_user(username, password = password, first_name = first_name, last_name = last_name)
+		#if phone number is invalid
+		if not phoneValidation(username):
+			messages.warning(request, "Enter a phone number with format: 07********")
+			#refresh the same page to display error
+			return HttpResponseRedirect('membersform')
+
+		try:
+			checkUser = ChamaMembers.objects.get(user__username = username)
+			#check if user is active and is a member of this chama
+			if checkUser.user.is_active == False and checkUser.chamaID.chamaID == session_chamaID:
+				#change name of user who already exists
+				checkUser.user.is_active = True
+				checkUser.user.first_name = first_name
+				checkUser.user.last_name = last_name
+
+				checkUser.user.save()
+				messages.success(request, "%s was added back to the group as %s %s" % (username, first_name, last_name))
+			else:
+				messages.warning(request, "%s already has a Chama Smart account" %username)
+
+		except ChamaMembers.DoesNotExist:
+			#if the DoesNotExist error is raised, try to register the user
+			try:
+				newMember = User.objects.create_user(username, password = password, first_name = first_name, last_name = last_name)
+			
+				#add the user to chama member group
+				group = Group.objects.get(name = "chama_member")
+				newMember.groups.add(group)
+
+				newMemberExtension = ChamaMembers(user = newMember, chamaID = Chamas(chamaID = session_chamaID))
+
+				newMemberExtension.save()
+				messages.success(request, "%s was added to the group" %username)
+			except:
+				messages.warning(request, "%s could not be added to the group" %username)
 		
-		#add the user to chama member group
-		group = Group.objects.get(name = "chama_member")
-		newMember.groups.add(group)
-
-		newMemberExtension = ChamaMembers(user = newMember, chamaID = Chamas(chamaID = session_chamaID))
-
-		newMemberExtension.save()
+		#if some other error is raised
+		except:
+			messages.warning(request, "Something went wrong")
+		
 		return HttpResponseRedirect('members')
 
 	return render(request, 'dashboard/membersForm.html')
@@ -115,14 +154,17 @@ def deleteUser(request, chamaID = None, username = None):
 	#we get username and their chama from urls
 	session_chamaID = request.user.chamas.chamaID
 
-	#to ensure a chama admin can disable only their members
-	if session_chamaID == chamaID:
-		user = User.objects.get(username = username)
-		user.is_active = False
-		user.save()
-		messages.success(request, user.first_name + ' has been removed from ' + request.user.chamas.chamaName)
-	else:
-		messages.warning(request, 'Member does not exist')
+	try:
+		#to ensure a chama admin can disable only their members
+		if session_chamaID == chamaID:
+			user = User.objects.get(username = username)
+			user.is_active = False
+			user.save()
+			messages.success(request, user.first_name + ' has been removed from ' + request.user.chamas.chamaName)
+		else:
+			messages.warning(request, 'Member does not exist')
+	except:
+		messages.warning(request, 'The member could not be deleted')
 
 	return HttpResponseRedirect('/members')
 

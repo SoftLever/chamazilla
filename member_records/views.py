@@ -1,10 +1,14 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
 from . import forms
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
 from dashboard.decorators import userNotAuthenticated
 from dashboard.models import Chamas
+
+#for validating signup form
+from dashboard.formvalidations import phoneValidation
 
 def index(request):
 	return render(request, 'member_records/index.html')
@@ -17,6 +21,11 @@ def signup(request):
 	subscriptionForm = forms.SubscriptionForm()
 
 	if request.method == "POST":
+		#Check if the phone number is valid
+		if not phoneValidation(request.POST.get('username')):
+			messages.warning(request, 'Enter phone number with this format: 07********')
+			return HttpResponseRedirect('signup')
+
 		form = forms.CreateUserForm(request.POST)
 		chamaForm = forms.ChamaForm(request.POST)
 		subscriptionForm = forms.SubscriptionForm(request.POST)

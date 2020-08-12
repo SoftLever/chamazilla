@@ -21,23 +21,24 @@
 
 		<table class="info_table">
 			<tr>
-				<th class = "hide_on_mobile">Member ID</th>
 				<th>Member Name</th>
+				<th class = "hide_on_mobile">Phone Number</th>
 				<th>Actions</th>
 			</tr>
 
 			{% for member in members_list %}
 
 				<tr>
-					<td class = "hide_on_mobile"> {{ member.memberID }} </td>
 					<td> {{ member.user.first_name }} {{ member.user.last_name }}</td>
+					<td class = "hide_on_mobile"> {{ member.user.username }} </td>
+					<td><a href = "memberpage/{{ member.user.username }}/">More Info</a> | <a style = "color: red;" href = "delete/{{ member.chamaID }}/{{ member.user.username }}/">Remove</a></td>
 				</tr>
 
-				<tr>
+				<!--<tr>
 					<td class = "hide_on_mobile"></td>
 					<td></td>
 					<td><a href = "memberpage/{{ member.user.username }}/">More Info</a> | <a style = "color: red;" href = "delete/{{ member.chamaID }}/{{ member.user.username }}/">Remove</a></td>
-				</tr>
+				</tr>-->
 
 			{% endfor %}
 

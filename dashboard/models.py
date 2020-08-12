@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 import datetime
 
+#for validation of amount
+from django.core.validators import MinValueValidator
+
 #This is a table that holds only 4 records - The numbers that will help in assigning IDs
 #fields names are fixed, they should NEVER BE EDITED
 #currentNumber should not be edited manually

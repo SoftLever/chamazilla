@@ -3,6 +3,10 @@
 {% block title %} Transactions {% endblock title %}
 {% block mobile_title %}TRANSACTIONS{% endblock mobile_title %}
 {% block content %}
+	
+	{% for message in messages %}
+		<p style="color:red">{{ message }}</p>
+	{% endfor %}
 
 	<div class = "form_div" id = "form_div">
 		<form class = "site_form" action = "#" method="POST">

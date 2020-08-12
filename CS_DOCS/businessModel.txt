@@ -25,3 +25,6 @@ The initial value of Chama Smart was determined by the amount of time taken by t
 Development of the Chama Smart Software began on Sunday, 19th July 2020. The software reached MVP on Tuesday, 4th August 2020 (17 days later). A MINIMUM of 8 hours a day went into building it. Working at $10/hr, the total development cost sums up to $1360 - that is Chama Smart's initital value.
 
 Investing in Chama Smart
+
+What's already being done?
+M-PESA Chama Account - we can intergrate this into Chama Smart

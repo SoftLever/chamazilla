@@ -1,0 +1,48 @@
+Chama Smart started off with 1,000,000 shares.
+
+Collins Upendo Otieno - 800,000 shares
+
+Chama Smart already has one chama onboard. The product's MVP has been built fully. So there is traction in terms of users and the product itself.
+
+Measuring the value
+How many customers are there?
+How much are they willing to pay for the service?
+
+Creation of new shares
+Shares are created for investors
+
+For instance, if the company is valued at ksh1,000,000 and an investor raises ksh300,000
+
+(300000/1000000)*100 = 30%
+
+30% more stocks ( 300000) are created and issued to the investor.
+
+So now the investor owns (300,000/1,300,000)% of the company - 23%
+
+Employees
+
+Equity
+Equity holders stay for at least 1 year, working for the company. Leaving before the end of this time will mean giving up their stake.
+
+Determinants of Equity;
+Levels of commitment
+Risk 
+innovation
+
+Full dedication
+at least 4 hours a day for 5 days
+
+Salary
+5,000
+
+Vesting
+If shareholders leave within the first 12 months, they don't get to take any stock with them. After 12 months, the stocks vest yearly. 4 years later, the shareholder gets to keep all their stock
+
+Stock
+The company issues an unlimited amount of shares
+
+Roles
+CEO (Visionary) - Collins Upendo Otieno
+Sales & Marketing
+Legal
+Developer
