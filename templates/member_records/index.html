@@ -4,8 +4,8 @@
 
 {% block content %}
 	<div class = "about_column">
-		<h1>About Chama Smart</h1>
-		<p> Chama Smart is a service that makes management of investement groups (Chamas) easier.</p>
+		<h1>About ChamaZilla</h1>
+		<p> ChamaZilla is a service that makes management of investement groups (Chamas) easier.</p>
 	</div>
 
 	<div class = "column">
@@ -19,7 +19,7 @@
 		</div>
 
 		<div class = "description_row">
-			<p> With Chama Smart, you can easily add and remove members and view information about each member.</p>
+			<p> With ChamaZilla, you can easily add and remove members and view information about each member.</p>
 		</div>
 
 	</div>
@@ -35,7 +35,7 @@
 		</div>
 
 		<div class = "description_row">
-			<p> Gone are the days when you had to calculate interests on loans issued and keep track of repayments on paper. Chama Smart makes issuing and tracking loans easy.</p>
+			<p> Gone are the days when you had to calculate interests on loans issued and keep track of repayments on paper. ChamaZilla makes issuing and tracking loans easy.</p>
 		</div>
 
 	</div>
@@ -51,7 +51,7 @@
 		</div>
 
 		<div class = "description_row">
-			<p> You can keep track of contributions, fines and other transaction information with Chama Smart.</p>
+			<p> You can keep track of contributions, fines and other transaction information with ChamaZilla.</p>
 		</div>
 
 	</div>
@@ -59,11 +59,11 @@
 	<div class = "signup_column">
 		{% if user.is_authenticated %}
 			<!--if user is authenticated -->
-			<h2> Thank you for staying connected with Chama Smart</h2>
+			<h2> Thank you for staying connected with ChamaZilla</h2>
 			<a href = "{% url 'dashboard' %}"><button>Go to Dashboard</button></a>
 		{% else %}
 			<h2> Management of Chamas has never been easier,</h2>
-			<a href = "{% url 'signup' %}"><button>Try Chama Smart Free</button></a>
+			<a href = "{% url 'signup' %}"><button>Try ChamaZilla Free</button></a>
 		{% endif %}
 	</div>
 

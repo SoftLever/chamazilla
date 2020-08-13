@@ -13,7 +13,7 @@
 
 	<div class = "mobile_title" id = "mobile_title">
 		<!--<a id = "reveal_navbar" href="" onclick="revealMobileNavbar()">-->
-		<img src="{% static '/images/menu.png' %}" onclick = "revealMobileNavbar()"></a>
+		<img src="{% static '/images/menu.png' %}" onclick = "revealMobileNavbar()">
 		<h2 id = "page_title">{% block mobile_title %}DASHBOARD{% endblock mobile_title %}</h2>
 	</div>
 
@@ -40,12 +40,12 @@
 					<div class="info_container">
 						<div class = "info_content">
 							<div class = "info_title">
-								<h1>BASIC INFO</h1>
+								<h1>GROUP INFO</h1>
 							</div>
 
 							<table class = "info_table">
 								<tr>
-									<td><h3>Chama Name</h3></td>
+									<td><h3>Group Name</h3></td>
 									<td>{{ chamaInfo.chamaName }}</td>
 								</tr>
 
@@ -61,7 +61,7 @@
 
 								<tr>
 									<td><h3>Date Created</h3></td>
-									<td>{{ chamaInfo.regDate }}</td>
+									<td>{{ chamaInfo.regDate.date }}</td>
 								</tr>
 
 								<tr>
@@ -80,7 +80,7 @@
 							</div>
 							<table class = "info_table">
 								<tr>
-									<td><h2 class="funds">{{ chamaInfo.funds | intcomma }}</h2></td>
+									<td><h2 class="funds">{{ funds | intcomma }}</h2></td>
 								</tr>
 							</table>
 						</div>
@@ -98,15 +98,16 @@
 
 							<table class="info_table">
 								<tr>
-									<td><h3>Subscription Type</h3></td>
+									<td><h3>Type</h3></td>
 									<td>{{ subscription.subscriptionType }}</td>
 								</tr>
 
 								<tr>
-									<td><h3>Subscription Status</h3></td>
+									<td><h3>Status</h3></td>
 
 									{% if subscription.endDate.date > today.date%}
-									<td style = "color: green"> Active for {{ daysToExpiry }} days, {{ hoursToExpiry }} hours, {{ minutesToExpiry }} minutes</td>
+									<td style = "color: green"> Active</td>
+									<!--<td colspan = "2" style = "color: green; text-align: right;">Active: {{ daysToExpiry }} days, {{ hoursToExpiry }} hours, {{ minutesToExpiry }} minutes</td>-->
 									{% else %}
 									<td style="color: red"> Expired</td>
 									{% endif %}
@@ -120,12 +121,12 @@
 
 								<tr>
 									<td> <h3>Start Date</h3></td>
-									<td>{{ subscription.startDate }}</td>
+									<td>{{ subscription.startDate.date }}</td>
 								</tr>
 
 								<tr>
-									<td><h3>End Date</h3></td>
-									<td>{{ subscription.endDate }}</td>
+									<td><h3>Expiry</h3></td>
+									<td>{{ subscription.endDate.date }}</td>
 								</tr>							
 							</table>
 
@@ -138,7 +139,7 @@
 								<h1>RECENT TRANSACTIONS</h1>
 							</div>
 
-							{% if not transactions %}
+							{% if not recentTransactions %}
 
 								<p style="color: red; text-align: center; font-size: 20px;">No Transactions yet</p>
 
@@ -150,19 +151,23 @@
 									<th>Type</th>
 									<th>Member</th>
 									<th>Amount</th>
-									<th class = "hide_on_mobile">Time</th>
+									<th class = "hide_on_mobile">Date</th>
 								</tr>
 	
-								{% for transaction in transactions %}
+								{% for transaction in recentTransactions %}
 
 									<tr>
 										<td>{{ transaction.transactionType }}</td>
 										<td>{{ transaction.memberID.user.first_name }}</td>
 										<td>{{ transaction.amount }}</td>
-										<td class = "hide_on_mobile">{{ transaction.transactionDate }}</td>
+										<td class = "hide_on_mobile">{{ transaction.transactionDate.date }}</td>
 									</tr>
 
 								{% endfor %}
+
+								<tr>
+									<td colspan="4" style="text-align: center; padding-top: 15px; color: blue;"><a href = "{% url 'transactions' %}">SHOW ALL TRANSACTIONS</a></td>
+								</tr>
 
 								</table>
 

@@ -75,7 +75,6 @@ class Chamas(models.Model):
 	chamaName = models.CharField(max_length = 50)
 	#add repID here
 	regDate = models.DateTimeField(auto_now_add = True)
-	funds = models.IntegerField(default = 0)
 	
 	def __str__(self):
 		return self.chamaID

@@ -26,11 +26,18 @@ import math
 def dashboard(request):
 	session_chamaID = request.user.chamas.chamaID
 	#for the transactions div
-	transactions = Transactions.objects.filter(memberID__chamaID = session_chamaID).order_by("-transactionDate")[:5]
+	recentTransactions = Transactions.objects.filter(memberID__chamaID = session_chamaID).order_by("-transactionDate")[:5]
+	transactions = Transactions.objects.filter(memberID__chamaID = session_chamaID).order_by("transactionDate")
 
 	#Get only members who match the chama logged in and are active
 	members_count = ChamaMembers.objects.filter(chamaID = session_chamaID, user__is_active = True).count()
 	chamaInfo = request.user.chamas
+	funds = 0
+	for transaction in transactions:
+		if str(transaction.transactionType) == "withdrawal":
+			funds -= transaction.amount
+		else:
+			funds += transaction.amount
 
 	#for the subscription div
 	#get the last subscription because it's the relevant one
@@ -41,7 +48,7 @@ def dashboard(request):
 	hoursToExpiry = math.floor(timeToExpiry.seconds/3600)
 	minutesToExpiry = math.floor(((timeToExpiry.seconds % 3600)/60))
 	
-	context = {'transactions': transactions, 'chamaInfo': chamaInfo,
+	context = {'recentTransactions': recentTransactions, 'chamaInfo':chamaInfo, 'funds': funds,
 	'members_count': members_count, 'subscription': subscription,
 	'today': today, 'daysToExpiry': daysToExpiry, 'hoursToExpiry': hoursToExpiry,
 	'minutesToExpiry': minutesToExpiry}
@@ -64,18 +71,7 @@ def transactionsform(request):
 
 		form = forms.addTransaction(session_chamaID, data = request.POST)
 		if form.is_valid():
-			instance = form.save(commit = False)
-			print(instance.amount)
-
-			#update the total funds of the chama
-			chamaInfo = request.user.chamas
-			if str(instance.transactionType) == "withdrawal":
-				chamaInfo.funds -= instance.amount
-			else:
-				chamaInfo.funds += instance.amount
-			instance.save()
-			chamaInfo.save()
-			print("New Transaction recorded, funds updated")
+			form.save()
 			return HttpResponseRedirect('transactions')
 
 	return render(request, 'dashboard/transactionsForm.html', context)
@@ -98,6 +94,26 @@ def membersform(request):
 			#refresh the same page to display error
 			return HttpResponseRedirect('membersform')
 
+		#if the admin is trying to add themselves
+		if username == request.user.username:
+			try:
+				ChamaMembers.objects.get(user__username = username)
+				messages.warning(request, "You are already a member")
+			except ChamaMembers.DoesNotExist:
+				#set name as provided by admin
+				request.user.first_name = first_name
+				request.user.last_name = last_name
+
+				#Create new chama member instance
+				memberInstance = ChamaMembers(user = request.user, chamaID = Chamas(chamaID = session_chamaID))
+				memberInstance.save()
+				request.user.save()
+				messages.success(request, "You added yourself to the group")
+			except:
+				messages.error(request, "Something went wrong")
+
+			return HttpResponseRedirect('members')
+
 		try:
 			checkUser = ChamaMembers.objects.get(user__username = username)
 			#check if user is active and is a member of this chama
@@ -110,7 +126,7 @@ def membersform(request):
 				checkUser.user.save()
 				messages.success(request, "%s was added back to the group as %s %s" % (username, first_name, last_name))
 			else:
-				messages.warning(request, "%s already has a Chama Smart account" %username)
+				messages.warning(request, "%s already has a ChamaZilla account" %username)
 
 		except ChamaMembers.DoesNotExist:
 			#if the DoesNotExist error is raised, try to register the user
@@ -155,6 +171,11 @@ def deleteUser(request, chamaID = None, username = None):
 	session_chamaID = request.user.chamas.chamaID
 
 	try:
+		#to prevent admins from deleting the group
+		if request.user.username == username:
+			messages.warning(request, "Call 0798380239 to change the group admin. Note: Changing admin will cost KSH30")
+			return HttpResponseRedirect('/members')
+
 		#to ensure a chama admin can disable only their members
 		if session_chamaID == chamaID:
 			user = User.objects.get(username = username)
@@ -189,9 +210,12 @@ def loans(request):
 @login_required(login_url = 'login')
 @userAuthenticated(allowed_roles = ['chama_member', 'chama_admin'])
 def memberPage(request, username =None):
+	#To know whether it's the group admin or 
+	#member viewing this page
+	viewingUser = request.user.groups.all()[0].name
+
 	context = {}
 	userInfo = ChamaMembers.objects.get(user__username = username)
-	print(userInfo.chamaID.chamaName)
 
 	#if authorized member or authorized admin
 	if request.user.username == username or request.user.username == userInfo.chamaID.user.username:
@@ -199,8 +223,19 @@ def memberPage(request, username =None):
 
 		#Show the user role without underscores
 		userGroup = userGroup.name.replace("_", " ")
-		transactions = Transactions.objects.filter(memberID = userInfo)
-		context = {"userInfo": userInfo, "userGroup": userGroup, "transactions": transactions}
+		transactions = Transactions.objects.filter(memberID = userInfo).order_by("-transactionDate")
+		funds = 0;
+		for transaction in transactions:
+			if str(transaction.transactionType) == "withdrawal":
+				funds -= transaction.amount
+
+			#fines are added to the chama's funds, not members
+			elif str(transaction.transactionType) == "fine":
+				funds +=0
+			else:
+				funds += transaction.amount
+
+		context = {"viewingUser":viewingUser, "userInfo": userInfo, "userGroup": userGroup, "transactions": transactions, "funds": funds}
 	else:
 		return HttpResponse('You are not authorized to view this page')
 

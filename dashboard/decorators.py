@@ -21,6 +21,9 @@ def userAuthenticated(allowed_roles = []):
 			if group in allowed_roles:
 				return view_func(request, *args, **kwargs)
 			else:
-				return HttpResponse('Whoa there! You are not authorized to view this page ' + request.user.username + ' (' + str(request.user.groups.all()[0]) + ')')
+				#redirect the user to their profile if they are
+				#not allowed to view any page
+				return redirect('/memberpage/%s/' %request.user.username)
+				#return HttpResponse('Whoa there! You are not authorized to view this page')
 		return wrapper_func
 	return decorator

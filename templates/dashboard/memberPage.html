@@ -1,28 +1,127 @@
-<h2>Member Info</h2>
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CS Member | {{ userInfo.user.username }}</title>
+	<!--takes styling from both dashboard and homepage-->
+	<link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static '/css/dashboard.css' %}">
 
-<p>Name;	{{ userInfo.user.first_name }} {{ userInfo.user.last_name }} </p>
-<p>Phone;	{{ userInfo.user.username }}</p>
-<p>Role;	{{ userGroup }} </p>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<h2>Transactions;</h2>
+	<style type="text/css">
+		.navbar{
+			/* 'overide' the position styling'*/ 
+			position: relative;
+		}
+	</style>
+</head>
+<body>
+		<div class = "navbar">
+			<a href = "{% url 'index' %}">HOME</a>
+			{% if viewingUser == 'chama_admin' %}
+				<a href = "{% url 'dashboard' %}">DASHBOARD</a>
+			{% endif %}
+			<a href = "{% url 'logout' %}">LOG OUT</a>
+		</div><!--End of navigation bar div-->
 
-<table>
+	<div class= "content" id = "content">
+
+		<div class = "content_row">
+
+			{% block content %}
+
+				<div class = "content_column">
+
+					<div class="info_container">
+						<div class = "info_content">
+							<div class = "info_title">
+								<h1>MEMBER INFO</h1>
+							</div>
+
+							<table class = "info_table">
+								<tr>
+									<td><h3>Name</h3></td>
+									<td>{{ userInfo.user.first_name }} {{ userInfo.user.last_name }}</td>
+								</tr>
+
+								<tr>
+									<td><h3>Phone</h3></td>
+									<td>{{ userInfo.user.username }}</td>
+								</tr>
+
+								<tr>
+									<td><h3>Role</h3></td>
+									<td>{{ userGroup }}</td>
+								</tr>
+
+								<tr>
+									<td><h3>Chama</h3></td>
+									<td> {{ userInfo.chamaID.chamaName }}</td>
+								</tr>
+							</table>
+
+						</div>
+					</div>
+					
+					<div class="info_container">
+						<div class = "info_content">
+							<div class = "info_title">
+								<h1>FUNDS</h1>
+							</div>
+							<table class = "info_table">
+								<tr>
+									<td><h2 class="funds">{{ funds }}</h2></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+
+				</div>
+
+				<div class = "content_column">
+
+					<div class="info_container">
+						<div class = "info_content">
+							<div class = "info_title">
+								<h1>TRANSACTIONS</h1>
+							</div>
+
+							{% if not transactions %}
+
+								<p style="color: red; text-align: center; font-size: 20px;">No Transactions yet</p>
+
+							{% else %}
+
+								<table class = "info_table">
+
+								<tr>
+									<th>Type</th>
+									<th>Amount</th>
+									<th class = "hide_on_mobile">Date</th>
+								</tr>
 	
+								{% for transaction in transactions %}
 
-	<th>
-		<td> Type </td>
-		<td> Amount </td>
-		<td> Date </td>
-	</th>
+									<tr>
+										<td>{{ transaction.transactionType }}</td>
+										<td>{{ transaction.amount }}</td>
+										<td class = "hide_on_mobile">{{ transaction.transactionDate }}</td>
+									</tr>
 
-	{% for transaction in transactions %}
+								{% endfor %}
 
-		<tr>
-			<td> {{ transaction.transactionType }}</td>
-			<td> {{ transaction.amount}} </td>
-			<td> {{ transaction.transactionDate }} </td>
-		</tr>
+								</table>
 
-	{% endfor %}
+							{% endif %}
 
-</table>
+						</div>
+					</div><!-- End of info_container-->
+				</div><!-- End of content_column -->
+
+			{% endblock content %}
+
+		</div><!-- End of content_row -->
+	</div><!-- End of container -->
+</body>
+</html>
