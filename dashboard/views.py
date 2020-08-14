@@ -27,7 +27,7 @@ def dashboard(request):
 	session_chamaID = request.user.chamas.chamaID
 	#for the transactions div
 	recentTransactions = Transactions.objects.filter(memberID__chamaID = session_chamaID).order_by("-transactionDate")[:5]
-	transactions = Transactions.objects.filter(memberID__chamaID = session_chamaID).order_by("transactionDate")
+	transactions = Transactions.objects.filter(memberID__chamaID = session_chamaID)
 
 	#Get only members who match the chama logged in and are active
 	members_count = ChamaMembers.objects.filter(chamaID = session_chamaID, user__is_active = True).count()
@@ -60,13 +60,29 @@ def dashboard(request):
 @userAuthenticated(allowed_roles = ['chama_admin'])
 def transactionsform(request):
 	session_chamaID = request.user.chamas.chamaID
+	#calculate the funds for the whole chama
+	transactions = Transactions.objects.filter(memberID__chamaID = session_chamaID)
+	funds = 0
+	for transaction in transactions:
+		if str(transaction.transactionType) == "withdrawal":
+			funds -= transaction.amount
+		else:
+			funds += transaction.amount
+
+	session_chamaID = request.user.chamas.chamaID
 	form = forms.addTransaction(session_chamaID)
+
 	context = {'form': form}
 	if request.method == 'POST':
 
 		#check if the amount is valid
 		if int(request.POST.get('amount')) < 0:
 			messages.warning(request, "Amount must be greater than 0")
+			return HttpResponseRedirect('transactionsform')
+
+		#check if the amount exceeds available funds
+		if (funds - int(request.POST.get('amount'))) < 0:
+			messages.warning(request, "Not enough funds to give %s" % request.POST.get('amount'))
 			return HttpResponseRedirect('transactionsform')
 
 		form = forms.addTransaction(session_chamaID, data = request.POST)
