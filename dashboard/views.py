@@ -69,19 +69,18 @@ def transactionsform(request):
 		else:
 			funds += transaction.amount
 
-	session_chamaID = request.user.chamas.chamaID
 	form = forms.addTransaction(session_chamaID)
 
 	context = {'form': form}
 	if request.method == 'POST':
 
 		#check if the amount is valid
-		if int(request.POST.get('amount')) < 0:
+		if int(request.POST.get('amount')) < 1:
 			messages.warning(request, "Amount must be greater than 0")
 			return HttpResponseRedirect('transactionsform')
 
-		#check if the amount exceeds available funds
-		if (funds - int(request.POST.get('amount'))) < 0:
+		#check if the amount exceeds available funds for withdrawals
+		if (request.POST.get('transactionType') == 'withdrawal' and funds - int(request.POST.get('amount'))) < 0:
 			messages.warning(request, "Not enough funds to give %s" % request.POST.get('amount'))
 			return HttpResponseRedirect('transactionsform')
 
