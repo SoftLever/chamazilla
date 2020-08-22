@@ -108,3 +108,25 @@ SUBSEQUENT DEPLOYMENTS / DEPLOYING UPDATES
 
 4) if any static file has changed;
 - python manage.py collectstatic
+
+BACKING UP CHAMAZILLA's DB
+
+cd into the parent dir to avoid altering the repo on the host
+	
+	cd ..
+
+	mkdir ChamaZilla_backups
+
+	cd ChamaZilla_backups
+
+	mysqldump -u technicollins -h technicollins.mysql.pythonanywhere-services.com -p --databases 'technicollins$CS_DB' > CS_DB.sql
+
+
+RESTORING CHAMAZILLA's DB
+
+	CREATE DATABASE technicollins$CS_DB;
+
+	mysql -u technicollins -h technicollins.mysql.pythonanywhere-services.com -p 'technicollins$CS_DB' < CS_DB.sql
+
+	If you get an error like this; ERROR 1227 (42000) at line 505: Access denied; you need (at least one of) the SUPER privilege(s) for this operation
+	Delete the line that requires super user permissions

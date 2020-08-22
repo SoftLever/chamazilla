@@ -1,5 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+
+#for fields that have a default datetime
+from django.utils import timezone
+
+#for the transactionid field
 import datetime
 
 #for validation of amount
@@ -73,8 +78,7 @@ class Chamas(models.Model):
 	user = models.OneToOneField(User, on_delete = models.CASCADE)
 	chamaID = models.CharField(primary_key = True, max_length = 15, default = generate_ChamaID)#add default value
 	chamaName = models.CharField(max_length = 50)
-	#add repID here
-	regDate = models.DateTimeField(auto_now_add = True)
+	regDate = models.DateTimeField(default = timezone.now)
 	
 	def __str__(self):
 		return self.chamaID
@@ -91,7 +95,7 @@ class Transactions(models.Model):
 	transactionID = models.CharField(primary_key = True, max_length = 20, default = generate_TransactionID)
 	transactionType = models.ForeignKey(TransactionTypes, on_delete = models.CASCADE)
 	memberID = models.ForeignKey(ChamaMembers, on_delete = models.CASCADE)
-	transactionDate = models.DateTimeField(auto_now_add = True)
+	transactionDate = models.DateTimeField(default = timezone.now)
 	amount = models.IntegerField(default = 0)
 	
 	def __str__(self):
@@ -105,13 +109,17 @@ class SubscriptionTypes(models.Model):
 	def __str__(self):
 		return self.subscriptionType
 
+#This function will add 7 days to the current time
+def set_Transaction_Expiry():
+	return timezone.now() + timezone.timedelta(days = 7)
+
 #This will be manually edited from the admin site when a chama pays for subscription
 class Subscriptions(models.Model):
 	subscriptionID = models.CharField(primary_key = True, max_length = 20, default = generate_SubscriptionID)
 	subscriptionType = models.ForeignKey(SubscriptionTypes, default = "trial", on_delete = models.CASCADE)
 	chamaID = models.ForeignKey(Chamas, on_delete = models.CASCADE)
-	startDate = models.DateTimeField(auto_now_add = True)
-	endDate = models.DateTimeField(default = datetime.datetime.now() + datetime.timedelta(7))
+	startDate = models.DateTimeField(default = timezone.now)
+	endDate = models.DateTimeField(default = set_Transaction_Expiry)
 	amount = models.IntegerField(default = 0)
 
 	def __str__(self):
