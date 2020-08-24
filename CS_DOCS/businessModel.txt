@@ -17,6 +17,10 @@ Where y is the amount chama smart charges, and is determined by x, the number of
 2. Manual Record Manipulation
 Chama Smart is built to have as few features as possible to maintain simplicity. Therefore, some functionalities like assigning roles are unavailable. However, database admins will be able to manipulate records on behalf of chamas at a fee. For example, changing the phone number of the Chama representative (the person who authenticates on behalf of the chama) will requiere a fee of ksh 50.
 
+3. Addition of old records
+@KSH2 per transaction record
+part time job opportunity - data entry person
+
 Scalability
 Chama Smart is a scalable business. The revenue made will depend on the number of Chamas that are subscribed to the service. The more the groups, the more the revenue.
 

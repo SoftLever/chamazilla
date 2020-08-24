@@ -98,7 +98,8 @@
 								<tr>
 									<th>Type</th>
 									<th>Amount</th>
-									<th class = "hide_on_mobile">Date</th>
+									<th>Date</th>
+									<!--<th class = "hide_on_mobile">Date</th>-->
 								</tr>
 	
 								{% for transaction in transactions %}
@@ -106,7 +107,8 @@
 									<tr>
 										<td>{{ transaction.transactionType }}</td>
 										<td>{{ transaction.amount }}</td>
-										<td class = "hide_on_mobile">{{ transaction.transactionDate }}</td>
+										<td>{{ transaction.transactionDate|date:"d M y"}}</td>
+										<!--<td class = "hide_on_mobile">{{ transaction.transactionDate }}</td>-->
 									</tr>
 
 								{% endfor %}

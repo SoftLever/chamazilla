@@ -61,7 +61,7 @@
 
 								<tr>
 									<td><h3>Date Created</h3></td>
-									<td>{{ chamaInfo.regDate.date }}</td>
+									<td>{{ chamaInfo.regDate|date:"d M y" }}</td>
 								</tr>
 
 								<tr>
@@ -121,12 +121,12 @@
 
 								<tr>
 									<td> <h3>Start Date</h3></td>
-									<td>{{ subscription.startDate.date }}</td>
+									<td>{{ subscription.startDate|date:"d M y" }}</td>
 								</tr>
 
 								<tr>
 									<td><h3>Expiry</h3></td>
-									<td>{{ subscription.endDate.date }}</td>
+									<td>{{ subscription.endDate|date:"d M y" }}</td>
 								</tr>							
 							</table>
 
