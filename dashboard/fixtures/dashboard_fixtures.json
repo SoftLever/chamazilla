@@ -65,6 +65,13 @@
 	{
 		"model": "dashboard.TransactionTypes",
 		"fields": {
+			"transactionType": "emergency"
+		}
+	},
+
+	{
+		"model": "dashboard.TransactionTypes",
+		"fields": {
 			"transactionType": "development"
 		}
 	},

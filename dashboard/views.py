@@ -245,8 +245,9 @@ def memberPage(request, username =None):
 				funds -= transaction.amount
 
 			#fines are added to the chama's funds, not members
+			#This logic may vary for each chama
 			elif str(transaction.transactionType) == "fine":
-				funds +=0
+				funds -= transaction.amount
 			else:
 				funds += transaction.amount
 
