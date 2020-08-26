@@ -1,0 +1,16 @@
+{% extends 'dashboard/dashboard.html' %}
+
+{% block title %} Deletion {% endblock title %}
+{% block mobile_title %}DELETION{% endblock mobile_title %}
+{% block content %}
+
+	<div class = "deletion">
+		<form action = "#" method = "post" class="deletion_form">
+			{% csrf_token %}
+			<button class = "deletion_button delete_yes" type = "submit" value = "yes" name = "confirmation">{{ prompt }}</button>
+			<button class = "deletion_button delete_no" type = "submit" value = "no" name = "confirmation">Cancel</button>
+		</form>
+
+	</div>
+
+{% endblock content %}

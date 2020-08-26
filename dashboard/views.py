@@ -27,11 +27,14 @@ def dashboard(request):
 	session_chamaID = request.user.chamas.chamaID
 	#for the transactions div
 	recentTransactions = Transactions.objects.filter(memberID__chamaID = session_chamaID).order_by("-transactionDate")[:5]
-	transactions = Transactions.objects.filter(memberID__chamaID = session_chamaID)
+	numberOfTransactions = Transactions.objects.filter(memberID__chamaID = session_chamaID).count()
 
 	#Get only members who match the chama logged in and are active
 	members_count = ChamaMembers.objects.filter(chamaID = session_chamaID, user__is_active = True).count()
 	chamaInfo = request.user.chamas
+
+	#For calculation of chama funds
+	transactions = Transactions.objects.filter(memberID__chamaID = session_chamaID)
 	funds = 0
 	for transaction in transactions:
 		if str(transaction.transactionType) == "withdrawal":
@@ -51,7 +54,7 @@ def dashboard(request):
 	context = {'recentTransactions': recentTransactions, 'chamaInfo':chamaInfo, 'funds': funds,
 	'members_count': members_count, 'subscription': subscription,
 	'today': today, 'daysToExpiry': daysToExpiry, 'hoursToExpiry': hoursToExpiry,
-	'minutesToExpiry': minutesToExpiry}
+	'minutesToExpiry': minutesToExpiry, 'numberOfTransactions': numberOfTransactions}
 
 	return render(request, 'dashboard/dashboard.html', context)
 
@@ -182,27 +185,40 @@ def members(request):
 @login_required(login_url = 'login')
 @userAuthenticated(allowed_roles = ['chama_admin'])
 def deleteUser(request, chamaID = None, username = None):
-	#we get username and their chama from urls
 	session_chamaID = request.user.chamas.chamaID
 
-	try:
-		#to prevent admins from deleting the group
-		if request.user.username == username:
-			messages.warning(request, "Call 0798380239 to change the group admin. Note: Changing admin will cost KSH30")
+	#declare context
+	context = {}
+
+	#to prevent admins from deleting the group
+	if request.user.username == username:
+		messages.warning(request, "Call 0798380239 to change the group admin. Note: Changing admin will cost KSH30")
+		return HttpResponseRedirect('/members')
+
+	#to ensure a chama admin can disable only their members
+	if session_chamaID == chamaID:
+		#Get the username of member to be deleted
+		user = User.objects.get(username = username)
+		context = {'prompt': "Delete %s" %user.first_name}
+
+		if request.method == "POST":
+			confirmation = request.POST.get('confirmation')
+
+			if confirmation == "yes":
+				user.is_active = False
+				user.save()
+				messages.success(request, user.first_name + ' has been removed from ' + request.user.chamas.chamaName)
+			elif confirmation == "no":
+				messages.warning(request, 'deletion of %s cancelled' %user.first_name)
+			else:
+				messages.warning(request, 'invalid input')
+
 			return HttpResponseRedirect('/members')
+	else:
+		messages.warning(request, 'The member does not exist')
+		return HttpResponseRedirect('/members')
 
-		#to ensure a chama admin can disable only their members
-		if session_chamaID == chamaID:
-			user = User.objects.get(username = username)
-			user.is_active = False
-			user.save()
-			messages.success(request, user.first_name + ' has been removed from ' + request.user.chamas.chamaName)
-		else:
-			messages.warning(request, 'Member does not exist')
-	except:
-		messages.warning(request, 'The member could not be deleted')
-
-	return HttpResponseRedirect('/members')
+	return render(request, 'dashboard/deleteUser.html', context)
 
 #This view displays all transactions of the authenticated chama
 @login_required(login_url = 'login')
@@ -239,6 +255,7 @@ def memberPage(request, username =None):
 		#Show the user role without underscores
 		userGroup = userGroup.name.replace("_", " ")
 		transactions = Transactions.objects.filter(memberID = userInfo).order_by("-transactionDate")
+		numberOfTransactions = Transactions.objects.filter(memberID = userInfo).count()
 		funds = 0;
 		for transaction in transactions:
 			if str(transaction.transactionType) == "withdrawal":
@@ -251,7 +268,7 @@ def memberPage(request, username =None):
 			else:
 				funds += transaction.amount
 
-		context = {"viewingUser":viewingUser, "userInfo": userInfo, "userGroup": userGroup, "transactions": transactions, "funds": funds}
+		context = {"viewingUser":viewingUser, "userInfo": userInfo, "userGroup": userGroup, "transactions": transactions, "funds": funds, "numberOfTransactions" :numberOfTransactions}
 	else:
 		return HttpResponse('You are not authorized to view this page')
 

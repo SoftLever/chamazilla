@@ -145,6 +145,7 @@
 
 							{% else %}
 
+
 								<table class = "info_table">
 
 								<tr>
@@ -166,7 +167,7 @@
 								{% endfor %}
 
 								<tr>
-									<td colspan="4" style="text-align: center; padding-top: 15px; color: blue;"><a href = "{% url 'transactions' %}">SHOW ALL TRANSACTIONS</a></td>
+									<td colspan="4" style="text-align: center; padding-top: 15px; color: blue;"><a href = "{% url 'transactions' %}">SHOW ALL {{ numberOfTransactions }} TRANSACTIONS</a></td>
 								</tr>
 
 								</table>

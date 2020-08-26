@@ -209,6 +209,33 @@ body{
 	color: #aaa;
 }
 
+/*styling for delete confirmation page*/
+.deletion{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+}
+
+.deletion_button{
+	margin: 10px auto;
+	width: 250px;
+	height: 40px;
+	color: #fff;
+	border:none;
+	font-size: 20px;
+}
+
+.delete_yes{
+	background-color: green;
+}
+
+.delete_no{
+	background-color: red;
+}
+
 
 @media (max-width: 745px){
 
@@ -314,5 +341,16 @@ body{
 
 	.site_form input, select, label{
 		width: 90%;
+	}
+
+	/*styling for deletion page*/
+	.deletion{
+		align-items: flex-start;
+		width: 100%;
+		height: 100px;
+	}
+
+	.deletion_button{
+		width: 100%;
 	}
 }
