@@ -81,7 +81,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'CS_DB',
         'USER': 'collins',
-        'PASSWORD': 'MySql_pa55m$rb_2020',
+        'PASSWORD': 'MySql_p@55m$rb_2020',
         'HOST': 'localhost',
         'PORT': '3306',
     }
