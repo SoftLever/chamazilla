@@ -1,5 +1,13 @@
 TECHNICAL DOCUMENTATION
 
+Tech Stack
+Backend; python, django
+Frontend; React
+
+Server; gunicorn, nginx
+
+Database; MySQL
+
 The chama registration page has 3 different forms; 
 
 ChamaForm - for filling chama related informtion. All fields except chamaName are filled automatically.
@@ -41,7 +49,7 @@ Chama Smart relies on predefined data for the database to work properly. This da
 	- chama_member
 
 
-DEPLOYING CHAMA SMART TO A LIVE SERVER FOR THE FIRST TIME
+DEPLOYING CHAMA SMART TO PYTHONANYWHERE
 
 Tip; if something doesn't work after making changes, try restarting the app first before trying other solutions
 
@@ -109,24 +117,211 @@ SUBSEQUENT DEPLOYMENTS / DEPLOYING UPDATES
 4) if any static file has changed;
 - python manage.py collectstatic
 
+
+
+DEPLOYING TO TRUEHOST LITESPEED VPS
+
+After buying VPS
+
+Your VPS has been created.
+The Login details are as follows :
+Username : upendocollins12@gmail.com
+Password : vps_p@55m$rb_2020
+URL : https://lim101.truehost.cloud:4083
+
+1:Upgrade OS to latest version - choose latest version of ubuntu
+https://lim101.truehost.cloud:4083/sesspnzal2bmynv5jnle/index.php?#os-cell-tab
+
+2:SSH to your VPS
+ssh root@51.195.13.34
+password: vps_p@55m$rb_2020
+
+3: create superuser
+adduser collins
+usermod -aG sudo collins
+
+ssh collins@51.195.13.34
+
+4:sudo apt update && sudo apt dist-upgrade
+
+5: install pip
+sudo apt install python3-pip
+
+6: install mysql
+sudo apt install mysql-server
+sudo mysql_secure_installation utility
+sudo apt-get install libmysqlclient-dev
+
+password: MySql_p@55m$rb_2020
+
+7: create a superuser for mysql
+sudo mysql -u root -p
+
+CREATE USER 'collins'@'localhost' IDENTIFIED BY 'MySql_p@55m$rb_2020';
+GRANT ALL PRIVILEGES ON *.* TO 'collins'@'localhost' WITH GRANT OPTION;
+SHOW GRANTS FOR username;
+FLUSH PRIVILEGES;
+
+8: create database
+sudo mysql -u collins -p
+CREATE DATABASE CS_DB;
+
+9: install virtual environment
+sudo apt install python3-virtualenv
+
+10: create virtual environment
+mkdir envs
+cd envs
+python3 -m virtualenv chama_db
+
+11: pull repo from github
+git clone https://github.com/TechniCollins/chama_database.git
+cd chama_database
+
+12: install dependencies in env
+pip install -r requirements.txt
+
+13: migrate
+python3 manage.py migrate
+
+14: Recover database
+cd ChamaZilla_backups
+mysql -u collins -p CS_DB < CS_DB.sql 
+
+15: allow port;
+sudo ufw enable
+sudo ufw allow 8000
+
+16: python3 manage.py collectstatic
+
+17: make systemd file
+deactivate
+sudo nano /etc/systemd/system/gunicorn.service
+
+paste this;
+
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+User=collins
+Group=www-data
+WorkingDirectory=/home/collins/chama_database
+ExecStart=/home/collins/envs/chama_db/bin/gunicorn --access-logfile - --workers 3 --bind unix:/home/collins/chama_database.sock chama_database.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+
+CTRL X, y, Enter to save
+
+18: sudo systemctl start gunicorn
+
+19: sudo systemctl enable gunicorn
+
+20: sudo systemctl status gunicorn
+
+
+21: install nginx
+sudo apt update
+sudo apt install nginx
+
+22: sudo nano /etc/nginx/sites-available/chama_database
+
+paste this;
+
+server {
+    listen 80;
+    server_name chamazilla.com;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /home/collins/chama_database/;
+    }
+
+    location /media/ {
+        root /home/collins/chama_database;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/collins/chama_database.sock;
+    }
+}
+
+23: sudo ln -s /etc/nginx/sites-available/chama_database /etc/nginx/sites-enabled
+
+24: test nginx
+sudo nginx -t
+
+25: restart nginx
+if there are no errors; sudo systemctl restart nginx
+
+26: sudo ufw delete allow 8000
+	sudo ufw allow 'Nginx Full'
+
+HELP; https://www.youtube.com/watch?v=BrVHwQ-SJUA, https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-16-04#create-and-configure-a-new-django-project
+
+
+Add SSL
+1: ssh collins@51.195.13.34
+
+2: Install snapd
+sudo apt update
+sudo apt install snapd
+log out and log back in
+
+HELP; https://snapcraft.io/docs/installing-snap-on-ubuntu
+
+3: Install certbot
+sudo snap install --classic certbot
+
+4: run certbot
+sudo certbot --nginx
+
+5: automatic renewal
+sudo certbot renew --dry-run
+
+
+6: Restart nginx
+sudo systemctl restart nginx
+
+
+SUBSEQUENT DEPLOYMENTS
+
+1: git pull origin master
+
+2: if static files have been modified
+python3 manage.py collectstatic
+
+3: if we made migrations locally
+python3 manage.py migrate
+
+4: Restart the vps - do this at odd hours
+https://lim101.truehost.cloud:4083
+
+Give it some time
+
+
+
+
 BACKING UP CHAMAZILLA's DB
-
-cd into the parent dir to avoid altering the repo on the host
-	
-	cd ..
-
-	mkdir ChamaZilla_backups
 
 	cd ChamaZilla_backups
 
-	mysqldump -u technicollins -h technicollins.mysql.pythonanywhere-services.com -p --databases 'technicollins$CS_DB' > CS_DB.sql
+	mysqldump -u collins -p --databases CS_DB > CS_DB.sql
+
+	Download the backup;
+	exit from ssh to use scp
+
+	scp collins@chamazilla.com:chama_database/ChamaZilla_backups/CS_DB.sql /home/technicollins/Desktop/Projects/chama_database/ChamaZilla_backups/
 
 
 RESTORING CHAMAZILLA's DB
 
-	CREATE DATABASE technicollins$CS_DB;
+	CREATE DATABASE CS_DB;
 
-	mysql -u technicollins -h technicollins.mysql.pythonanywhere-services.com -p 'technicollins$CS_DB' < CS_DB.sql
+	mysql -u collins -p CS_DB < CS_DB.sql 
 
 	If you get an error like this; ERROR 1227 (42000) at line 505: Access denied; you need (at least one of) the SUPER privilege(s) for this operation
 	Delete the line that requires super user permissions
