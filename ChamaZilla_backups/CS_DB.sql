@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.27, for Linux (x86_64)
 --
--- Host: technicollins.mysql.pythonanywhere-services.com    Database: technicollins$CS_DB
+-- Host: localhost    Database: CS_DB
 -- ------------------------------------------------------
 -- Server version	5.7.28-log
 
@@ -24,12 +24,12 @@ SET @@SESSION.SQL_LOG_BIN= 0;
 SET @@GLOBAL.GTID_PURGED='';
 
 --
--- Current Database: `technicollins$CS_DB`
+-- Current Database: `CS_DB`
 --
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `technicollins$CS_DB` /*!40100 DEFAULT CHARACTER SET utf8 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `CS_DB` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
-USE `technicollins$CS_DB`;
+USE `CS_DB`;
 
 --
 -- Table structure for table `auth_group`
