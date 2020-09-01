@@ -25,7 +25,7 @@ SECRET_KEY = 'onpdc$_ywl#+&f(kc03tq-g^2-0bv+$*7#g(2b!htxm$fjpnvi'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['51.195.13.34']
+ALLOWED_HOSTS = ['chamazilla.com', '51.195.13.34']
 
 
 # Application definition
