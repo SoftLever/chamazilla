@@ -1,70 +1,109 @@
-{% extends 'member_records/base.html' %}
-
 {% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="{% static '/css/index.css' %}">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<title>ChamaZilla</title>
+</head>
+<body>
+	<section class="app_section mockup_section" id = "mockup_section">
 
-{% block content %}
-	<div class = "about_column">
-		<h1>About ChamaZilla</h1>
-		<p> ChamaZilla is a service that makes management of investement groups (Chamas) easier.</p>
-	</div>
+		<div class = "navbar">
 
-	<div class = "column">
+			<div class = "logo hide_on_mobile">
+				<a href="#">CHAMAZILLA</a>
+			</div>
 
-		<div class = "title_row">
-			<h1> Member Management</h1>
+			<div class = "nav_links">
+
+				<a href = "#mockup_section">HOME</a>
+				<a href = "#features_section">FEATURES</a>
+
+				<!-- if user is authenticated-->
+				{% if user.is_authenticated %}
+					<a href = "{% url 'dashboard' %}">DASHBOARD</a>
+					<a href = "{% url 'logout' %}">LOG OUT</a>
+				{% else %}
+				<!--if user is not authenticated-->
+					<a href = "{% url 'login' %}">LOG IN</a>
+				{% endif %}
+			</div>
+
+		</div><!--End of navigation bar div-->
+
+		<div class = "row home_row align_center">
+
+			<div class = "column text_column">
+				<h1 class = "info_heading white_font">Management of chamas made easier</h1>
+				<p class = "info_paragraph white_font">ChamaZilla is a service that helps investment groups manage their activities with ease.</p>
+				{% if user.is_authenticated %}
+					<a class = "signup_link" href = "{% url 'dashboard' %}">GO TO DASHBOARD</a>
+				{% else %}
+					<a class = "signup_link" href = "{% url 'signup' %}">TRY CHAMAZILLA FREE</a>
+				{% endif %}
+			</div>
+
+			<div class="column image_column hide_on_mobile">
+				<img class = "app_mockup" src="{% static '/images/mockup.png' %}">
+			</div>
+
 		</div>
 
-		<div class = "icon_row">
-			<img src="{% static '/images/group.png' %}">
+	</section>
+
+	<section class = "app_section features_section" id = "features_section">
+
+		<div class = "row align_center">
+			<h1 class = "info_heading black_font">With ChamaZilla you can</h1>
 		</div>
 
-		<div class = "description_row">
-			<p> With ChamaZilla, you can easily add and remove members and view information about each member.</p>
+		<div class = "row features_row align_center">
+
+			<div class = "column features_column align_center">
+				<img src = "{% static '/images/group.png' %}" width="50%" height="50%">
+				<h2>Manage Members</h2>
+			</div>
+
+			<div class = "column features_column align_center">
+				<img src = "{% static '/images/loan.png' %}" width="50%" height="50%">
+				<h2>Manage Loans</h2>
+			</div>
+
+			<div class = "column features_column align_center">
+				<img src = "{% static '/images/transaction.png' %}" width="50%" height="50%">
+				<h2>Manage Transactions</h2>
+			</div>
+
+			<div class = "column features_column align_center">
+				<img src = "{% static '/images/fine.png' %}" width="50%" height="50%">
+				<h2>Fine Members</h2>
+			</div>
+
+			<div class = "column features_column align_center">
+				<img src = "{% static '/images/record.png' %}" width="50%" height="50%">
+				<h2>Manage records</h2>
+			</div>
+
 		</div>
 
-	</div>
+	</section>
 
-	<div class = "column">
-
-		<div class = "title_row">
-			<h1> Loan Management</h1>
+	<section class="try_chamazilla align_center">
+		<div class = "cta_div align_center">
+			{% if user.is_authenticated %}
+				<h1 class = "info_heading white_font">Thank you for staying connected</h1>
+				<a href="{% url 'signup' %}" class = "signup_link">GO TO DASHBOARD</a>
+			{% else %}
+				<h1 class = "info_heading white_font">Register your group today</h1>
+				<p class = "info_paragraph white_font">Sign up now and try ChamaZilla free for 14 days.</p>
 		</div>
+		<a href="{% url 'signup' %}" class = "signup_link">TRY CHAMAZILLA</a>
+			{% endif %}
+	</section>
 
-		<div class = "icon_row">
-			<img src="{% static '/images/money.png' %}">
-		</div>
+	<footer>
+	</footer>
 
-		<div class = "description_row">
-			<p> Gone are the days when you had to calculate interests on loans issued and keep track of repayments on paper. ChamaZilla makes issuing and tracking loans easy.</p>
-		</div>
-
-	</div>
-
-	<div class = "column">
-
-		<div class = "title_row">
-			<h1>Transaction Management</h1>
-		</div>
-
-		<div class = "icon_row">
-			<img src="{% static '/images/smartphone.png' %}">
-		</div>
-
-		<div class = "description_row">
-			<p> You can keep track of contributions, fines and other transaction information with ChamaZilla.</p>
-		</div>
-
-	</div>
-
-	<div class = "signup_column">
-		{% if user.is_authenticated %}
-			<!--if user is authenticated -->
-			<h2> Thank you for staying connected with ChamaZilla</h2>
-			<a href = "{% url 'dashboard' %}"><button>Go to Dashboard</button></a>
-		{% else %}
-			<h2> Management of Chamas has never been easier,</h2>
-			<a href = "{% url 'signup' %}"><button>Try ChamaZilla Free</button></a>
-		{% endif %}
-	</div>
-
-{% endblock content %}
+</body>
+</html>
