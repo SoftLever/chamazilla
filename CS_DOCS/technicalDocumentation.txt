@@ -306,6 +306,11 @@ Give it some time
 
 
 BACKING UP CHAMAZILLA's DB
+	
+	We don't want to mess with our repo, so;
+
+	cd ..
+	mkdir ChamZilla_backups
 
 	cd ChamaZilla_backups
 
@@ -314,7 +319,7 @@ BACKING UP CHAMAZILLA's DB
 	Download the backup;
 	exit from ssh to use scp
 
-	scp collins@chamazilla.com:chama_database/ChamaZilla_backups/CS_DB.sql /home/technicollins/Desktop/Projects/chama_database/ChamaZilla_backups/
+	scp collins@chamazilla.com:ChamaZilla_backups/CS_DB.sql /home/technicollins/Desktop/Projects/chama_database/ChamaZilla_backups/
 
 
 RESTORING CHAMAZILLA's DB
