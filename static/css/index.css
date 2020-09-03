@@ -53,6 +53,8 @@ body, html{
 	width: 100%;
 	position: fixed;
 	background-color: #fff;
+	border-bottom: solid #0574FA;
+	border-width: 2px;
 }
 
 .nav_links{
@@ -62,6 +64,7 @@ body, html{
 }
 
 .nav_links a{
+	font-size: 14px;
 	color: black;
 	padding: 20px;
 	text-decoration: none;
@@ -177,6 +180,11 @@ body, html{
 
 	.nav_links a{
 		margin:auto;
+	}
+
+	.nav_links a.toggle_nav{
+		display: block;
+		float: right;
 	}
 
 	/*styling for the whole page*/

@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
 from dashboard.decorators import userNotAuthenticated
-from dashboard.models import Chamas
+from dashboard.models import Chamas, Subscriptions
 
 #for validating signup form
 from dashboard.formvalidations import phoneValidation
@@ -18,7 +18,6 @@ def index(request):
 def signup(request):
 	form = forms.CreateUserForm()
 	chamaForm = forms.ChamaForm()
-	subscriptionForm = forms.SubscriptionForm()
 
 	if request.method == "POST":
 		#Check if the phone number is valid
@@ -28,9 +27,7 @@ def signup(request):
 
 		form = forms.CreateUserForm(request.POST)
 		chamaForm = forms.ChamaForm(request.POST)
-		subscriptionForm = forms.SubscriptionForm(request.POST)
-		#and subscriptionForm.is_valid
-		if form.is_valid() and chamaForm.is_valid() and subscriptionForm.is_valid():
+		if form.is_valid() and chamaForm.is_valid():
 
 			#Save the user
 			user = form.save()
@@ -44,19 +41,17 @@ def signup(request):
 			chama.user = user
 
 			#Add subscription for chama
-			subscription = subscriptionForm.save(commit = False)
-			subscription.chamaID = chama
+			subscription = Subscriptions(chamaID = chama)
 
 			chama = chama.save()
 			subscription.save()
 
-			messages.success(request, 'Account was created successfully')
-			messages.success(request, 'Your payment quote will be sent in 24 hours')
+			messages.success(request, 'Account was created successfully.')
 			return redirect('login')
 
-	context = {'form':form, 'chamaForm':chamaForm, 'subscriptionForm':subscriptionForm}
+	context = {'form':form, 'chamaForm':chamaForm}
 
-	return render(request, 'member_records/signup.html', context)
+	return render(request, 'member_records/multistep_signup.html', context)
 
 @userNotAuthenticated
 def loginpage(request):

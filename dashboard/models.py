@@ -111,7 +111,7 @@ class SubscriptionTypes(models.Model):
 
 #This function will add 7 days to the current time
 def set_Transaction_Expiry():
-	return timezone.now() + timezone.timedelta(days = 7)
+	return timezone.now() + timezone.timedelta(days = 14)
 
 #This will be manually edited from the admin site when a chama pays for subscription
 class Subscriptions(models.Model):

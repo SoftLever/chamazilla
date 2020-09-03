@@ -6,6 +6,10 @@ Sign up
 
 {% block content %}
 
+<section class = "input_section">
+	{{ form.username }}
+</section>
+
 <div class = "authdiv">
 
 	<div class="auth_title">
@@ -17,21 +21,22 @@ Sign up
 		<form action = "#" method = "POST" class = "auth_form">
 			{% csrf_token %}
 			{{ form.username }}
+			{{ form.username.errors}}
 			{{ chamaForm.chamaName }}
+			{{ chamaForm.chamaName.errors }}
 			{{ subscriptionForm.subscriptionType }}
+			{{ subscriptionForm.subscriptionType.errors}}
 			<label>Note: A Trial subscription will expire in 7 days</label>
 			{{ form.password1 }}
+			{{ form.password1.errors }}
 			{{ form.password2 }}
+			{{ form.password2.errors }}
 			<input type="submit" value="Register">
 		</form>
 
 	</div>
 
 	<div class = "message_div">
-
-		{{ form.errors }}
-		{{ chamaForm.errors }}
-		{{ subscriptionForm.errors }}
 
 		{% for message in messages%}
 			<p>{{ message }}</p>

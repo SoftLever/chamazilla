@@ -122,6 +122,12 @@ body{
 	height: 30%;/*description_row takes 25% of the column height*/
 }
 
+/*styling for multi-step signup form*/
+.input_section{
+	width: 100%;
+	height: 100%;
+}
+
 .signup_column{
 	display: flex;
 	flex-direction: column;
@@ -147,29 +153,6 @@ body{
 	border: none;
 }
 
-.footer{
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin: 0;
-	width: 100%;
-	height: 10%; /*occupies 10% of the total body height*/
-	background-color: #0574FA;
-}
-
-.footer p{
-	color: #fff;
-	font-size: 20px;
-}
-
-.footer a{
-	text-decoration: none;
-	color: #fff;
-}
-
-.footer a:hover{
-	color: #ddd;
-}
 
 /*Style for signup/login pages*/
 .authdiv{
@@ -229,10 +212,6 @@ body{
 @media (max-width: 700px){
 	.flex_container{
 		height: 100%;/*return height to 100% because footer won't be available*/
-	}
-
-	.footer{/*remove the footer for mobile devices*/
-		display: none;
 	}
 
 	.signup_column h2{ /*display the paragraph for large devices only*/
