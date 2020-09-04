@@ -51,7 +51,7 @@ def signup(request):
 
 	context = {'form':form, 'chamaForm':chamaForm}
 
-	return render(request, 'member_records/multistep_signup.html', context)
+	return render(request, 'member_records/signup.html', context)
 
 @userNotAuthenticated
 def loginpage(request):

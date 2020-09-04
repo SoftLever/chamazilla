@@ -41,7 +41,7 @@
 				{% if user.is_authenticated %}
 					<a class = "signup_link" href = "{% url 'dashboard' %}">GO TO DASHBOARD</a>
 				{% else %}
-					<a class = "signup_link" href = "{% url 'signup'%}#chama_name_section">TRY CHAMAZILLA FREE</a>
+					<a class = "signup_link" href = "{% url 'signup'%}">TRY CHAMAZILLA FREE</a>
 				{% endif %}
 			</div>
 
@@ -99,7 +99,7 @@
 				<h1 class = "info_heading white_font">Register your group today</h1>
 				<p class = "info_paragraph white_font">Sign up now and try ChamaZilla free for 14 days.</p>
 		</div>
-		<a href="{% url 'signup' %}#chama_name_section" class = "signup_link">TRY CHAMAZILLA</a>
+		<a href="{% url 'signup' %}" class = "signup_link">TRY CHAMAZILLA</a>
 			{% endif %}
 	</section>
 

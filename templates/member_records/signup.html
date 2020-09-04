@@ -1,63 +1,130 @@
-{% extends 'member_records/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ChamaZilla {% block title %}Signup{% endblock title %}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/auth.css' %}">
+</head>
 
-{% block title %}
-Sign up
-{%endblock title %}
+<body>
 
-{% block content %}
+	{% block content %}
 
-<section class = "input_section">
-	{{ form.username }}
-</section>
+	<form action = "#" method="POST" id = "signup_form" autocomplete="off">
+		{% csrf_token %}
+	</form>
 
-<div class = "authdiv">
+	<section class = "form_section" id = "chama_name_section">
 
-	<div class="auth_title">
-		<h1>Register Your Chama</h1>
-	</div>
+		<div class = "row">
 
-	<div class="auth_form_div">
+			<div class = "input_label">
+				<label for = "chamaName">What's the name of your chama?</label>
+			</div>
 
-		<form action = "#" method = "POST" class = "auth_form">
-			{% csrf_token %}
-			{{ form.username }}
-			{{ form.username.errors}}
-			{{ chamaForm.chamaName }}
-			{{ chamaForm.chamaName.errors }}
-			{{ subscriptionForm.subscriptionType }}
-			{{ subscriptionForm.subscriptionType.errors}}
-			<label>Note: A Trial subscription will expire in 7 days</label>
-			{{ form.password1 }}
-			{{ form.password1.errors }}
-			{{ form.password2 }}
-			{{ form.password2.errors }}
-			<input type="submit" value="Register">
-		</form>
+			<div class="input_field">
+				{{ chamaForm.chamaName }}
+			</div>
 
-	</div>
+			<div class="errors" id = "chamaName_errors">
+				{{ chamaForm.chamaName.errors }}
+			</div>
 
-	<div class = "message_div">
+			<div class = "next_button">
+				<a href="#phone_number_section" id = "chamaName_button">NEXT</a>
+			</div>
 
-		{% for message in messages%}
-			<p>{{ message }}</p>
-		{% endfor %}
+		</div>
 
-	</div>
+	</section>
 
-</div>
+	<section class = "form_section" id = "phone_number_section">
 
-{% endblock content %}
+		<div class = "row">
+
+			<div class = "input_label">
+				<label for = "phone_number">What's your phone number?</label>
+			</div>
+
+			<div class="input_field">
+				{{ form.username }}
+			</div>
+
+			<div class="errors" id = "phone_number_errors">
+				{{ form.username.errors}}
+			</div>
+
+			<div class = "next_button">
+				<a href="#password1_section" id = "phone_number_button">NEXT</a>
+			</div>
+
+		</div>
+
+	</section>
+
+	<section class = "form_section" id = "password1_section">
+
+		<div class = "row">
+
+			<div class = "input_label">
+				<label for = "password1">Set a password</label>
+			</div>
+
+			<div class="input_field">
+				{{ form.password1 }}
+			</div>
+
+			<div class="errors" id = "password1_errors">
+				{{ form.password1.errors }}
+			</div>
+
+			<div class = "next_button">
+				<a href="#password2_section" id = "password1_button">NEXT</a>
+			</div>
+
+		</div>
+
+	</section>
+
+	<section class = "form_section" id = "password2_section">
+
+		<div class = "row">
+
+			<div class = "input_label">
+				<label for = "password2">Confirm your password</label>
+			</div>
+
+			<div class="input_field">
+				{{ form.password2 }}
+			</div>
+
+			<div class="errors" id = "password2_errors">
+				{{ form.password2.errors }}
+			</div>
+
+			<div class = "next_button">
+				<input type = "submit" class = "submit_form" form = "signup_form" value="START FREE TRIAL" id = "password2_button">
+			</div>
+
+		</div>
+
+	</section>
+
+	{% endblock content %}
+
+	
+</body>
+</html>
 
 {% block javascript %}
+<script src="{% static 'js/signup.js' %}"></script>
+
 <script type="text/javascript">
-	phone = document.getElementById("id_username");
-	password1 = document.getElementById("id_password1");
-	password2 = document.getElementById("id_password2");
-	chamaName = document.getElementById("id_chamaName");
-	subscriptionType = document.getElementById("id_subscriptionType");
-	phone.placeholder = "Phone Number";
-	chamaName.placeholder = "Name of Chama";
-	password1.placeholder = "Password";
-	password2.placeholder = "Password Again";
+	/* run these functions on page load*/
+	validateEmpty('chamaName', 'chamaName_button');
+	validatePhoneNumber('phone_number', 'phone_number_errors', 'phone_number_button');
+	validatePassword('password1', 'password1_errors', 'password1_button');
+	validatePassword('password2', 'password2_errors', 'password2_button');
 </script>
 {% endblock javascript %}
