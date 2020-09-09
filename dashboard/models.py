@@ -34,7 +34,7 @@ def getNextID(fieldName):
 
 def generate_ChamaID():
 	nextID = getNextID("chamaid")
-	chamaID = "CSG" + str(nextID).zfill(5)
+	chamaID = "CZG" + str(nextID).zfill(5)
 	
 	print(chamaID)
 
@@ -42,7 +42,7 @@ def generate_ChamaID():
 
 def generate_TransactionID():
 	nextID = getNextID("transactionid")
-	transactionID = "CST" + str(nextID).zfill(10) + datetime.date.today().strftime("%y")
+	transactionID = "CZT" + str(nextID).zfill(10) + datetime.date.today().strftime("%y")
 
 	print(transactionID)
 
@@ -50,7 +50,7 @@ def generate_TransactionID():
 
 def generate_memberID():
 	nextID = getNextID("memberid")
-	memberID = "CSM" + str(nextID).zfill(10)
+	memberID = "CZM" + str(nextID).zfill(10)
 
 	print(memberID)
 
@@ -58,11 +58,17 @@ def generate_memberID():
 
 def generate_SubscriptionID():
 	nextID = getNextID("subscriptionid")
-	subscriptionID = "CSS" + str(nextID).zfill(10)
+	subscriptionID = "CZS" + str(nextID).zfill(10)
 
 	print(subscriptionID)
 
 	return subscriptionID
+
+def generate_loanID():
+	nextID = getNextID("loanid")
+	loanID = "CZL" + str(nextID).zfill(10)
+
+	return loanID
 
 #A one column table that stores transaction types only
 #transaction types; merry-go-round, savings, development, fine
@@ -124,3 +130,32 @@ class Subscriptions(models.Model):
 
 	def __str__(self):
 		return self.subscriptionID
+
+def set_Repayment_Date():
+	return timezone.now() + timezone.timedelta(days = 30)
+
+class LoanStatus(models.Model):
+	loanStatusID = models.CharField(primary_key = True, max_length = 10)
+
+	def __str__(self):
+		return self.loanStatusID
+
+class LoanSettings(models.Model):
+	chamaID = models.OneToOneField(Chamas, primary_key = True, on_delete = models.CASCADE)
+	interestRate = models.DecimalField(default = 10.00, max_digits = 5, decimal_places = 2)
+	repaymentPeriod = models.IntegerField(default = 30)
+
+	#def __str__(self):
+	#	return self.chamaID
+
+class Loans(models.Model):
+	loanID = models.CharField(primary_key = True, max_length = 30, default = generate_loanID)
+	memberID = models.ForeignKey(ChamaMembers, on_delete = models.CASCADE)
+	amount = models.IntegerField(default = 0)
+	repaymentAmount = models.IntegerField(default = amount)
+	issueDate = models.DateTimeField(default = timezone.now)
+	repaymentDate = models.DateTimeField(default = set_Repayment_Date)
+	status = models.ForeignKey(LoanStatus, on_delete = models.CASCADE, default = "unpaid")
+
+	def __str__(self):
+		return self.loanID

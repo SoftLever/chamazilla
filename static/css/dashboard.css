@@ -236,6 +236,23 @@ body{
 	background-color: red;
 }
 
+/*styling for transactions page*/
+.page_nav{
+	font-size: 16px;
+	text-decoration: none;
+	color: #fff;
+	background: #FA8B05;
+	margin-right: 5px;
+	padding:10px;
+	width: 50px;
+	text-align: center;
+	margin-top: 20px;
+}
+
+.active_page{
+	width:100px;
+	background: #0574FA;
+}
 
 @media (max-width: 745px){
 

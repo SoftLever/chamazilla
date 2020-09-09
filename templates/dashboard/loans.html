@@ -2,7 +2,104 @@
 
 {% block title %} Members {% endblock title %}
 {% block mobile_title %}LOANS{% endblock mobile_title %}
+
+{% block stylesheet %}
+	<style type="text/css">
+		.column{
+			margin-top: 10px;
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+		}
+
+		.loan_form{
+			width: 100%;
+		}
+
+		button{
+			width: 200px;
+			height: 40px;
+		}
+
+		h2{
+			font-size: 22px;
+			color: #0574FA;
+		}
+
+		.messages{
+			color: red;
+		}
+	</style>
+{% endblock stylesheet %}
+
 {% block content %}
-<h1>OOPS!!!</h1>
-<p>The loans functionality is not ready yet</p>
+
+<div class="column">
+	<h2> Loan Settings </h2>
+</div>
+
+<div class="column">
+
+	<form method = "POST" action = "#" class="loan_form">
+		{% csrf_token %}
+		<label for = "interest_rate"> Interest Rate (%)</label>
+		<input type = "number" id = "interest_rate" step = ".01" value="{{ loanSettings.interestRate }}" disabled name = "interest_rate">
+		<label for = "repayment_period"> Repayment Period (days)</label>
+		<input type = "number" id = "repayment_period" value = "{{ loanSettings.repaymentPeriod }}" name = "repayment_period" disabled>
+		<input type = "submit" id = "submit_loan_settings" disabled style="display: none;" value = "change settings" name = "submit_loan_settings">
+	</form>
+
+</div>
+
+<div class="column">
+	<button id = "enable_loan_settings" onclick="enableLoanSettings()">Change Loan Settings</button>
+	<button id = "hide_loan_settings" onclick="hideLoanSettings()" style="display: none;">Cancel</button>
+</div>
+
+<div class="column">
+	<h2> Issue Loan</h2>
+</div>
+
+<div class="column">
+
+	<form method="POST" action = "#" class="loan_form">
+		{% csrf_token %}
+		{{ loanForm }}
+		<input type="submit" name="submit_loan" value="issue loan">
+	</form>
+
+</div>
+
+<div class="column messages">
+	{% for messages in messages %}
+		{{ messages }}
+	{% endfor %}
+</div>
+
+<div class="column">
+	<a href="loanspage">View issued loans</a>
+</div>
+
+
 {% endblock content %}
+
+{% block javascript %}
+	<script type="text/javascript">
+		function enableLoanSettings(){
+			document.getElementById("interest_rate").disabled = false;
+			document.getElementById("repayment_period").disabled = false;
+			document.getElementById("enable_loan_settings").style.display = "none";
+			document.getElementById("hide_loan_settings").style.display = "block";
+			document.getElementById("submit_loan_settings").style.display = "block";
+			document.getElementById("submit_loan_settings").disabled = false;
+		}
+
+		function hideLoanSettings(){
+			document.getElementById("interest_rate").disabled = true;
+			document.getElementById("repayment_period").disabled = true;
+			document.getElementById("hide_loan_settings").style.display = "none";
+			document.getElementById("enable_loan_settings").style.display = "block";
+			document.getElementById("submit_loan_settings").style.display = "none";
+		}
+	</script>
+{% endblock javascript %}

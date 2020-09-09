@@ -1,10 +1,5 @@
 from django.contrib import admin
 from . import models
 
-admin.site.register(models.ChamaMembers)
-admin.site.register(models.Chamas)
-admin.site.register(models.Transactions)
-admin.site.register(models.fieldID)
-admin.site.register(models.TransactionTypes)
-admin.site.register(models.Subscriptions)
-admin.site.register(models.SubscriptionTypes)
+admin_models = [models.ChamaMembers, models.Chamas, models.Transactions, models.fieldID, models.TransactionTypes, models.Subscriptions, models.SubscriptionTypes, models.Loans, models.LoanSettings, models.LoanStatus]
+admin.site.register(admin_models)

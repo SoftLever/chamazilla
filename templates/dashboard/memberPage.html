@@ -87,7 +87,7 @@
 								<h1>TRANSACTIONS</h1>
 							</div>
 
-							{% if not transactions %}
+							{% if not page_object %}
 
 								<p style="color: red; text-align: center; font-size: 20px;">No Transactions yet</p>
 
@@ -104,7 +104,7 @@
 									<!--<th class = "hide_on_mobile">Date</th>-->
 								</tr>
 	
-								{% for transaction in transactions %}
+								{% for transaction in page_object %}
 
 									<tr>
 										<td>{{ transaction.transactionType }}</td>
@@ -120,6 +120,19 @@
 							{% endif %}
 
 						</div>
+
+							{% if page_object.has_previous %}
+								<a class = "page_nav" href="?page=1">FIRST</a>
+								<a class = "page_nav" href="?page={{ page_object.previous_page_number }}">PREV</a>
+							{% endif %}
+
+							<a href = "#" class = "page_nav active_page">PAGE {{ page_object.number }}</a>
+
+        					{% if page_object.has_next %}
+         					    <a class = "page_nav" href="?page={{ page_object.next_page_number }}">NEXT</a>
+            					<a class = "page_nav" href="?page={{ page_object.paginator.num_pages }}"> {{ page_object.paginator.num_pages }}</a>
+        					{% endif %}
+        					
 					</div><!-- End of info_container-->
 				</div><!-- End of content_column -->
 

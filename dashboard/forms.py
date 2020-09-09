@@ -13,3 +13,13 @@ class addTransaction(forms.ModelForm):
 		model = models.Transactions
 		fields = ['memberID', 'transactionType', 'amount']
 		labels = {'memberID': 'Member ID', 'transactionType': 'Transaction Type', 'amount': 'Amount'}
+
+class loanForm(forms.ModelForm):
+
+	def __init__(self, chamaID, *args, **kwargs):
+		super(loanForm, self).__init__(*args, **kwargs)
+		self.fields['memberID'] = forms.ModelChoiceField(queryset = models.ChamaMembers.objects.filter(chamaID = chamaID, user__is_active = True), empty_label = "Choose a member")
+
+	class Meta:
+		model = models.Loans
+		fields = ['memberID', 'amount']

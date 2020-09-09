@@ -1,0 +1,40 @@
+{% extends 'dashboard/dashboard.html' %}
+{% block title %} Loans {% endblock title %}
+{% block mobile_title %}LOANS{% endblock mobile_title %}
+
+{% block content %}
+
+<div class = "display_records_row">
+
+	{% if not loans %}
+		<h1 style="color: red; text-align: center;">No Loans Issued</h1>
+	{% else %}
+
+	<table class = "info_table">
+		<tr>
+			<th>Member</th>
+			<th>Amount</th>
+			<th>Borrow Date</th>
+			<th>Repayment Date</th>
+			<th>Repayment Amount</th>
+			<th>Status</th>
+		</tr>
+
+	{% for loan in loans %}
+		<tr>
+			<td>{{ loan.memberID }}</td>
+			<td>{{ loan.amount }}</td>
+			<td>{{ loan.issueDate.date }}</td>
+			<td>{{ loan.repaymentDate.date }}</td>
+			<td>{{ loan.repaymentAmount }}</td>
+			<td>{{ loan.status }}</td>
+		</tr>
+	{% endfor %}
+
+	</table>
+
+	{% endif %}
+
+</div>
+
+{% endblock content %}

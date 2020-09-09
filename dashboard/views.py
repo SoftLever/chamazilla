@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
-from .models import ChamaMembers, Transactions, Chamas, Subscriptions
+from .models import ChamaMembers, Transactions, Chamas, Subscriptions, LoanSettings, Loans
 from . import forms
 
 #for confirming deletion of users
@@ -18,8 +18,52 @@ from django.contrib.auth.models import Group
 #for validations
 from .formvalidations import phoneValidation
 
+#to paginate data so that table doesn't get too long
+from django.core.paginator import Paginator
+
 import datetime
 import math
+
+#to set loans repayment date
+from django.utils import timezone
+
+#most common tasks
+def calculateChamaFunds(chama):
+	funds = 0
+	totalLoans = 0
+	totalTransactions = 0
+
+	transactions = Transactions.objects.filter(memberID__chamaID = chama)
+	loans = Loans.objects.filter(memberID__chamaID = chama)
+
+	for loan in loans:
+		totalLoans += loan.amount
+
+	for transaction in transactions:
+		if str(transaction.transactionType) == "withdrawal":
+			totalTransactions -= transaction.amount
+		else:
+			totalTransactions += transaction.amount
+
+	funds = totalTransactions - totalLoans
+
+	return funds
+
+def calculateMemberFunds(member):
+	transactions = Transactions.objects.filter(memberID = member).order_by("-transactionDate")
+	funds = 0;
+	for transaction in transactions:
+		if str(transaction.transactionType) == "withdrawal":
+			funds -= transaction.amount
+
+		#fines are added to the chama's funds, not members
+		#This logic may vary for each chama
+		elif str(transaction.transactionType) == "fine":
+			funds -= transaction.amount
+		else:
+			funds += transaction.amount
+
+	return funds
 
 @login_required(login_url = 'login')
 @userAuthenticated(allowed_roles = ['chama_admin'])
@@ -33,14 +77,8 @@ def dashboard(request):
 	members_count = ChamaMembers.objects.filter(chamaID = session_chamaID, user__is_active = True).count()
 	chamaInfo = request.user.chamas
 
-	#For calculation of chama funds
-	transactions = Transactions.objects.filter(memberID__chamaID = session_chamaID)
-	funds = 0
-	for transaction in transactions:
-		if str(transaction.transactionType) == "withdrawal":
-			funds -= transaction.amount
-		else:
-			funds += transaction.amount
+	#Calculate funds
+	funds = calculateChamaFunds(session_chamaID)
 
 	#for the subscription div
 	#get the last subscription because it's the relevant one
@@ -64,13 +102,7 @@ def dashboard(request):
 def transactionsform(request):
 	session_chamaID = request.user.chamas.chamaID
 	#calculate the funds for the whole chama
-	transactions = Transactions.objects.filter(memberID__chamaID = session_chamaID)
-	funds = 0
-	for transaction in transactions:
-		if str(transaction.transactionType) == "withdrawal":
-			funds -= transaction.amount
-		else:
-			funds += transaction.amount
+	funds = calculateChamaFunds(session_chamaID)
 
 	form = forms.addTransaction(session_chamaID)
 
@@ -176,8 +208,11 @@ def membersform(request):
 def members(request):
 	session_chamaID = request.user.chamas.chamaID
 	members_list = ChamaMembers.objects.filter(chamaID = session_chamaID, user__is_active = True).order_by("-memberID")
+	paginated_members = Paginator(members_list, 10)
+	page_number = request.GET.get('page')
+	page_object= paginated_members.get_page(page_number)
 
-	context = {'members_list': members_list}
+	context = {'page_object': page_object}
 
 	return render(request, 'dashboard/chamaMembers.html', context)
 
@@ -226,15 +261,62 @@ def deleteUser(request, chamaID = None, username = None):
 def transactions(request):
 	session_chamaID = request.user.chamas.chamaID
 	transactions = Transactions.objects.filter(memberID__chamaID = session_chamaID).order_by("-transactionDate")
+	paginated_transactions = Paginator(transactions, 10)
+	page_number = request.GET.get('page')
+	page_object= paginated_transactions.get_page(page_number)
 
-	context = {'transactions': transactions}
+	context = {'page_object': page_object}
 
 	return render(request, 'dashboard/transactions.html', context)
 
 @login_required(login_url = 'login')
 @userAuthenticated(allowed_roles = ['chama_admin'])
 def loans(request):
-	return render(request, 'dashboard/loans.html')
+	session_chamaID = request.user.chamas.chamaID
+	loanSettings = LoanSettings.objects.get(chamaID = session_chamaID)
+	loanForm = forms.loanForm(session_chamaID)	
+	context = {'loanSettings': loanSettings, 'loanForm': loanForm}
+
+	funds = calculateChamaFunds(session_chamaID)
+
+	if request.method == "POST":
+		if "submit_loan_settings" in request.POST:
+			loanSettings.interestRate = request.POST.get('interest_rate')
+			loanSettings.repaymentPeriod = request.POST.get('repayment_period')
+			loanSettings.save()
+			messages.success(request, "Loan settings changed")
+
+		elif "submit_loan" in request.POST:
+			loanForm = forms.loanForm(session_chamaID, data = request.POST)
+			#check if chama has enough money
+			amount = int(request.POST.get('amount'))
+			if(funds - amount) < 0:
+				messages.warning(request, "There is no enough money to issue %d" %amount)
+
+			else:
+				if loanForm.is_valid():
+					loanFormInstance = loanForm.save(commit = False)
+					loanFormInstance.repaymentAmount = loanFormInstance.amount + ((loanSettings.interestRate/100)*loanFormInstance.amount)
+					loanFormInstance.repaymentDate = loanFormInstance.issueDate + timezone.timedelta(days = loanSettings.repaymentPeriod)
+					loanFormInstance.save()
+					messages.success(request, "Loan issued")
+				else:
+					messages.warning(request, "something went wrong")
+		else:
+			#meme this person if they are making a bad request
+			return HttpResponseRedirect('https://bit.ly/3lZ8kiV')
+
+	return render(request, 'dashboard/loans.html', context)
+
+
+@login_required(login_url = 'login')
+@userAuthenticated(allowed_roles = ['chama_member', 'chama_admin'])
+def loansPage(request):
+	session_chamaID = request.user.chamas.chamaID
+	loans = Loans.objects.filter(memberID__chamaID = session_chamaID).order_by("-issueDate")
+	context = {'loans': loans}
+
+	return render(request, 'dashboard/loansPage.html', context)
 
 #This view displays individual chama member information
 #Should be accessible to the relevant member only and their admin
@@ -255,20 +337,14 @@ def memberPage(request, username =None):
 		#Show the user role without underscores
 		userGroup = userGroup.name.replace("_", " ")
 		transactions = Transactions.objects.filter(memberID = userInfo).order_by("-transactionDate")
+		paginated_transactions = Paginator(transactions, 10)
+		page_number = request.GET.get('page')
+		page_object= paginated_transactions.get_page(page_number)
 		numberOfTransactions = Transactions.objects.filter(memberID = userInfo).count()
-		funds = 0;
-		for transaction in transactions:
-			if str(transaction.transactionType) == "withdrawal":
-				funds -= transaction.amount
+		funds = calculateMemberFunds(userInfo);
 
-			#fines are added to the chama's funds, not members
-			#This logic may vary for each chama
-			elif str(transaction.transactionType) == "fine":
-				funds -= transaction.amount
-			else:
-				funds += transaction.amount
-
-		context = {"viewingUser":viewingUser, "userInfo": userInfo, "userGroup": userGroup, "transactions": transactions, "funds": funds, "numberOfTransactions" :numberOfTransactions}
+		context = {"viewingUser":viewingUser, "userInfo": userInfo, "userGroup": userGroup, "funds": funds, "numberOfTransactions" :numberOfTransactions, 'page_object':page_object}
+	
 	else:
 		return HttpResponse('You are not authorized to view this page')
 

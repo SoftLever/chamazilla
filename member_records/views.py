@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
 from dashboard.decorators import userNotAuthenticated
-from dashboard.models import Chamas, Subscriptions
+from dashboard.models import Chamas, Subscriptions, LoanSettings
 
 #for validating signup form
 from dashboard.formvalidations import phoneValidation
@@ -43,8 +43,12 @@ def signup(request):
 			#Add subscription for chama
 			subscription = Subscriptions(chamaID = chama)
 
-			chama = chama.save()
+			#Add default loan settings for chama
+			loanSettings = LoanSettings(chamaID = chama)
+
+			chama.save()
 			subscription.save()
+			loanSettings.save()
 
 			messages.success(request, 'Account was created successfully.')
 			return redirect('login')

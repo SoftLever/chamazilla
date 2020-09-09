@@ -70,7 +70,7 @@ Change DJANGO_SETTINGS_MODULE in manage.py to settings.production
 5) Install all dependencies
 - pip install -r requirements.txt
 
-6) Create web app with same name as repo and choose manual config
+6) Create web app using manual config
 
 - source code; /home/technicollins/chama_database
 - working directory; /home/technicollins/
