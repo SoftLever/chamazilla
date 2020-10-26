@@ -1,0 +1,62 @@
+{% extends 'dashboard/dashboard.html' %}
+
+{% block title %} Members {% endblock title %}
+{% block mobile_title %}MEMBERSHIP{% endblock mobile_title %}
+
+{% block content %}
+
+	<div class= "add_record_row">
+		<a href = "{% url 'membersform' %}">Add New Member</a>
+	</div>
+	
+	<div class = "display_records_row">
+		<!-- confirm user deletion -->
+		{% for message in messages %}
+			<p style="color:red">{{ message }}</p>
+		{% endfor %}
+
+		{% if not page_object %}
+			<h1 style="color:red; text-align: center;">No members yet</h1>
+		{% else %}
+
+		<table class="info_table">
+			<tr>
+				<th>Member Name</th>
+				<th class = "hide_on_mobile">Phone Number</th>
+				<th>Actions</th>
+			</tr>
+
+			{% for member in page_object %}
+
+				<tr>
+					<td> {{ member.user.first_name }} {{ member.user.last_name }}</td>
+					<td class = "hide_on_mobile"> {{ member.user.username }} </td>
+					<td><a href = "memberpage/{{ member.user.username }}/">More Info</a> | <a style = "color: red;" href = "delete/{{ member.chamaID }}/{{ member.user.username }}/">Remove</a></td>
+				</tr>
+
+				<!--<tr>
+					<td class = "hide_on_mobile"></td>
+					<td></td>
+					<td><a href = "memberpage/{{ member.user.username }}/">More Info</a> | <a style = "color: red;" href = "delete/{{ member.chamaID }}/{{ member.user.username }}/">Remove</a></td>
+				</tr>-->
+
+			{% endfor %}
+
+		</table>
+		{% endif %}
+
+		{% if page_object.has_previous %}
+			<a class = "page_nav" href="?page=1">FIRST</a>
+			<a class = "page_nav" href="?page={{ page_object.previous_page_number }}">PREV</a>
+		{% endif %}
+
+			<a href = "#" class = "page_nav active_page">PAGE {{ page_object.number }}</a>
+
+        {% if page_object.has_next %}
+            <a class = "page_nav" href="?page={{ page_object.next_page_number }}">NEXT</a>
+            <a class = "page_nav" href="?page={{ page_object.paginator.num_pages }}"> {{ page_object.paginator.num_pages }}</a>
+        {% endif %}
+
+	</div>
+
+{% endblock content %}

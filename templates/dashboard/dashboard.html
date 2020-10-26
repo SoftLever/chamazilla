@@ -1,234 +1,382 @@
 {% load static %}
 {% load humanize %} {# to format how funds are displayed #}
-{% load tz %} {# to compare datetime, to determine subscription status #}
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-	<link rel="stylesheet" type="text/css" href="{% static '/css/dashboard.css' %}">
-	<title>CS Dashboard |{% block title %} Chama Info {% endblock title %}</title>
-	{% block stylesheet %}
-	{% endblock stylesheet %}
-	<!-- For responsivenes' sake-->
-	<meta name="viewport" content="width=device-width,initial-scale=1.0">
-</head>
-<body>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>
+    ChamaZilla
+  </title>
+  <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+  <!--     Fonts and icons     -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+  <!-- CSS Files -->
+  <link href="{% static '/assets/css/material-dashboard.css' %}?v=2.1.2" rel="stylesheet" />
 
-	<div class = "mobile_title" id = "mobile_title">
-		<!--<a id = "reveal_navbar" href="" onclick="revealMobileNavbar()">-->
-		<img src="{% static '/images/menu.png' %}" onclick = "revealMobileNavbar()">
-		<h2 id = "page_title">{% block mobile_title %}DASHBOARD{% endblock mobile_title %}</h2>
-	</div>
+<body class="">
+  <div class="wrapper ">
+    <div class="sidebar" data-color="purple" data-background-color="white" data-image="{% static '/assets/img/sidebar-1.jpg' %}">
+      <!--
+        Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
 
-	<div class = "dashboard_navbar" id = "dashboard_navbar">
-		<div class="app_name">
-			<h1>CHAMA SMART</h1><img src="{% static '/images/menu.png' %}" onclick="revealMobileNavbar()">
-		</div>
+        Tip 2: you can also add an image using data-image tag
+    -->
+      <div class="logo"><a href="http://chamazilla.com" class="simple-text logo-normal">
+          ChamaZilla
+        </a></div>
+      <div class="sidebar-wrapper">
+        <ul class="nav">
+          <li class="nav-item {% block dashboard_active %}active{% endblock dashboard_active %}">
+            <a class="nav-link" href="{% url 'dashboard' %}">
+              <i class="material-icons">dashboard</i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+          <li class="nav-item {% block membership_active %}{% endblock membership_active %}">
+            <a class="nav-link" href="{% url 'members' %}">
+              <i class="material-icons">person</i>
+              <p>Membership</p>
+            </a>
+          </li>
+          <li class="nav-item {% block transactions_active %}{% endblock transactions_active %}">
+            <a class="nav-link" href="{% url 'transactions' %}">
+              <i class="material-icons">content_paste</i>
+              <p>Transactions</p>
+            </a>
+          </li>
+          <li class="nav-item {% block loans_active %}{% endblock loans_active %}">
+            <a class="nav-link" href="{% url 'loans' %}">
+              <i class="material-icons">library_books</i>
+              <p>Loans</p>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="main-panel">
 
-		<a href="{% url 'dashboard' %}"><span><img class = "navbar_icon" src="{% static '/images/question.png' %}"></span>CHAMA INFO</a>
-		<a href="{% url 'members' %}"><span><img class = "navbar_icon" src="{% static '/images/group.png' %}"></span>MEMBERSHIP</a>
-		<a href="{% url 'loans' %}" ><span><img class = "navbar_icon" src="{% static '/images/loan.png' %}"></span>LOANS</a>
-		<a href="{% url 'transactions' %}" onclick =><span><img class = "navbar_icon" src="{% static '/images/transaction.png' %}"></span>TRANSACTIONS</a>
-		<a href="{% url 'index' %}" ><img class = "navbar_icon" src="{% static '/images/home.png' %}"><span>HOME</span></a>
-	</div>
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+        <div class="container-fluid">
+          <div class="navbar-wrapper">
+            <a class="navbar-brand" href="javascript:;">{% block page_title %}Dashboard{% endblock page_title %}</a>
+          </div>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end">
+            <form class="navbar-form">
+              <div class="input-group no-border">
+                <input type="text" value="" class="form-control" placeholder="Search...">
+                <button type="submit" class="btn btn-white btn-round btn-just-icon">
+                  <i class="material-icons">search</i>
+                  <div class="ripple-container"></div>
+                </button>
+              </div>
+            </form>
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'dashboard' %}">
+                  <i class="material-icons">dashboard</i>
+                  <p class="d-lg-none d-md-block">
+                    Stats
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="material-icons">notifications</i>
+                  <span class="notification">2</span>
+                  <p class="d-lg-none d-md-block">
+                    Some Actions
+                  </p>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                  <a class = "dropdown-item" href="#"> Subscription expires in; {{ daysToExpiry }} days</a>
+                  <a class="dropdown-item" href="#">{{ subscription.startDate|date:"d M y" }} : {{ subscription.subscriptionType }} subscription added</a>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link" href="javascript:;" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="material-icons">person</i>
+                  <p class="d-lg-none d-md-block">
+                    Account
+                  </p>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
+                  <a class="dropdown-item" href="#">Profile</a>
+                  <a class="dropdown-item" href="#">Settings</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="{% url 'logout' %}">Log out</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <!-- End Navbar -->
 
-	<div class= "content" id = "content">
+      <div class="content">
+        <div class="container-fluid">
 
-		<div class = "content_row">
+          {% block content %}
 
-			{% block content %}
+          <div class="row">
 
-				<div class = "content_column">
+            <div class="col-lg-4 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-success card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">account_balance</i>
+                  </div>
+                  <p class="card-category">Revenue</p>
+                  <h3 class="card-title">{{ funds | intcomma }}</h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    Total revenue available
+                  </div>
+                </div>
+              </div>
+            </div>
 
-					<div class="info_container">
-						<div class = "info_content">
-							<div class = "info_title">
-								<h1>GROUP INFO</h1>
-							</div>
+            {% if subscription.endDate.date > today.date%}
+            
+            <div class="col-lg-4 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-success card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">alarm</i>
+                  </div>
+                  <p class="card-category">Subscription</p>
+                  <h3 class = "card-title"> Active</h3>
 
-							<table class = "info_table">
-								<tr>
-									<td><h3>Group Name</h3></td>
-									<td>{{ chamaInfo.chamaName }}</td>
-								</tr>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons text-success">check_circle</i>
+                    Expires in; {{ daysToExpiry }} days, {{ hoursToExpiry }} hours, {{ minutesToExpiry }} minutes
+                  </div>
+                </div>
+              </div>
+            </div>
 
-								<tr>
-									<td><h3>Members</h3></td>
-									<td>{{ members_count }}</td>
-								</tr>
+            {% else %}
 
-								<tr>
-									<td></td>
-									<td><a href = "{% url 'members' %}">Manage</a></td>
-								</tr>
+            <div class="col-lg-4 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-warning card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">alarm</i>
+                  </div>
+                  <p class="card-category">Subscription</p>
+                  <h3 class = "card-title"> Expired</h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons text-danger">warning</i>
+                    <a href="javascript:;">Get new subscription</a>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-								<tr>
-									<td><h3>Date Created</h3></td>
-									<td>{{ chamaInfo.regDate|date:"d M y" }}</td>
-								</tr>
+            {% endif %}
 
-								<tr>
-									<td><h3>Representative</h3></td>
-									<td> {{ chamaInfo.user.username }}</td>
-								</tr>
-							</table>
+            <div class="col-lg-4 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-success card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">info_outline</i>
+                  </div>
+                  <p class="card-category">Members</p>
+                  <h3 class="card-title">{{ members_count }}</h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <a href="{% url 'members' %}">Manage</a>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-						</div>
-					</div>
-					
-					<div class="info_container">
-						<div class = "info_content">
-							<div class = "info_title">
-								<h1>FUNDS</h1>
-							</div>
-							<table class = "info_table">
-								<tr>
-									<td><h2 class="funds">{{ funds | intcomma }}</h2></td>
-								</tr>
-							</table>
-						</div>
-					</div>
+          </div> <!-- end row -->
 
-				</div>
+          <div class = "row">
 
-				<div class = "content_column">
+            <div class="col-lg-12 col-md-12">
+              <div class="card">
+                <div class="card-header card-header-success">
+                  <h4 class="card-title">Recent Transactions</h4>
+                  <p class="card-category">The last 10 transactions recorded</p>
+                </div>
+                <div class="card-body table-responsive">
 
-					<div class="info_container">
-						<div class = "info_content">
-							<div class = "info_title">
-								<h1>SUBSCRIPTION</h1>
-							</div>
+                {% if not recentTransactions %}
 
-							<table class="info_table">
-								<tr>
-									<td><h3>Type</h3></td>
-									<td>{{ subscription.subscriptionType }}</td>
-								</tr>
+                  <p style="color: red; text-align: center; font-size: 20px;">No Transactions yet</p>
 
-								<tr>
-									<td><h3>Status</h3></td>
+                {% else %}
 
-									{% if subscription.endDate.date > today.date%}
-									<td style = "color: green"> Active</td>
-									<!--<td colspan = "2" style = "color: green; text-align: right;">Active: {{ daysToExpiry }} days, {{ hoursToExpiry }} hours, {{ minutesToExpiry }} minutes</td>-->
-									{% else %}
-									<td style="color: red"> Expired</td>
-									{% endif %}
+                  <table class="table table-hover">
+                    <thead class="text-success">
+                      <th>Type</th>
+                      <th>Member</th>
+                      <th>Amount</th>
+                      <th>Date</th>
+                    </thead>
+                    <tbody>
 
-								</tr>
+                      {% for transaction in recentTransactions %}
 
-								<tr>
-									<td><h3>Amount</h3></td>
-									<td>{{ subscription.amount }}</td>
-								</tr>
+                        <tr>
+                          <td>{{ transaction.transactionType }}</td>
+                          <td>{{ transaction.memberID.user.first_name }}</td>
+                          <td>{{ transaction.amount }}</td>
+                          <td>{{ transaction.transactionDate|date:"d M y" }}</td>
+                        </tr>
 
-								<tr>
-									<td> <h3>Start Date</h3></td>
-									<td>{{ subscription.startDate|date:"d M y" }}</td>
-								</tr>
+                      {% endfor %}
 
-								<tr>
-									<td><h3>Expiry</h3></td>
-									<td>{{ subscription.endDate|date:"d M y" }}</td>
-								</tr>							
-							</table>
+                    </tbody>
+                  </table>
 
-						</div>
-					</div>
+                {% endif %}
 
-					<div class="info_container">
-						<div class = "info_content">
-							<div class = "info_title">
-								<h1>RECENT TRANSACTIONS</h1>
-							</div>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <a href="{% url 'transactions' %}">SHOW ALL {{ numberOfTransactions }} TRANSACTIONS</a>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-							{% if not recentTransactions %}
+          </div>
 
-								<p style="color: red; text-align: center; font-size: 20px;">No Transactions yet</p>
+          {% endblock content %}
 
-							{% else %}
+        </div>
+      </div> <!-- end content -->
 
+      <footer class="footer">
+        <div class="container-fluid">
+          <nav class="float-left">
+            <ul>
+              <li>
+                <a href="https://chamazilla.com">
+                  ChamaZilla
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </footer>
 
-								<table class = "info_table">
+    </div> <!-- End main panel -->
+  </div> <!-- End wrapper -->
 
-								<tr>
-									<th>Type</th>
-									<th>Member</th>
-									<th>Amount</th>
-									<th class = "hide_on_mobile">Date</th>
-								</tr>
-	
-								{% for transaction in recentTransactions %}
+  <!--   Core JS Files   -->
+  <script src="{% static '/assets/js/core/jquery.min.js' %} "></script>
+  <script src="{% static '/assets/js/core/popper.min.js' %} "></script>
+  <script src="{% static '/assets/js/core/bootstrap-material-design.min.js' %} "></script>
+  <script src="{% static '/assets/js/plugins/perfect-scrollbar.jquery.min.js' %} "></script>
+  <!-- Plugin for the momentJs  -->
+  <script src="{% static '/assets/js/plugins/moment.min.js' %} "></script>
+  <!--  Plugin for Sweet Alert -->
+  <script src="{% static '/assets/js/plugins/sweetalert2.js' %} "></script>
+  <!-- Forms Validations Plugin -->
+  <script src="{% static '/assets/js/plugins/jquery.validate.min.js' %} "></script>
+  <!-- Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
+  <script src="{% static '/assets/js/plugins/jquery.bootstrap-wizard.js' %} "></script>
+  <!--  Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
+  <script src="{% static '/assets/js/plugins/bootstrap-selectpicker.js' %} "></script>
+  <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
+  <script src="{% static '/assets/js/plugins/bootstrap-datetimepicker.min.js' %} "></script>
+  <!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
+  <script src="{% static '/assets/js/plugins/jquery.dataTables.min.js' %} "></script>
+  <!--  Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
+  <script src="{% static '/assets/js/plugins/bootstrap-tagsinput.js' %} "></script>
+  <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
+  <script src="{% static '/assets/js/plugins/jasny-bootstrap.min.js' %} "></script>
+  <!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
+  <script src="{% static '/assets/js/plugins/fullcalendar.min.js' %} "></script>
+  <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+  <script src="{% static '/assets/js/plugins/nouislider.min.js' %} "></script>
+  <!-- Include a polyfill for ES6 Promises (optional) for IE11, UC Browser and Android browser support SweetAlert -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
+  <!-- Library for adding dinamically elements -->
+  <script src="{% static '/assets/js/plugins/arrive.min.js' %} "></script>
+  <!-- Chartist JS -->
+  <script src="{% static '/assets/js/plugins/chartist.min.js' %} "></script>
+  <!--  Notifications Plugin    -->
+  <script src="{% static '/assets/js/plugins/bootstrap-notify.js' %} "></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="{% static '/assets/js/material-dashboard.js' %}?v=2.1.2 " type="text/javascript"></script>
+  
+  {% block javascript %}
 
-									<tr>
-										<td>{{ transaction.transactionType }}</td>
-										<td>{{ transaction.memberID.user.first_name }}</td>
-										<td>{{ transaction.amount }}</td>
-										<td class = "hide_on_mobile">{{ transaction.transactionDate|date:"d M y" }}</td>
-									</tr>
+  <script>
+    $(document).ready(function() {
+      $().ready(function() {
 
-								{% endfor %}
+        $('.switch-sidebar-mini input').change(function() {
+          $body = $('body');
 
-								<tr>
-									<td colspan="4" style="text-align: center; padding-top: 15px; color: blue;"><a href = "{% url 'transactions' %}">SHOW ALL {{ numberOfTransactions }} TRANSACTIONS</a></td>
-								</tr>
+          $input = $(this);
 
-								</table>
+          if (md.misc.sidebar_mini_active == true) {
+            $('body').removeClass('sidebar-mini');
+            md.misc.sidebar_mini_active = false;
 
-							{% endif %}
+            $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar();
 
-						</div>
-					</div><!-- End of info_container-->
-				</div><!-- End of content_column -->
+          } else {
 
-			{% endblock content %}
+            $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar('destroy');
 
-		</div><!-- End of content_row -->
-	</div><!-- End of container -->
+            setTimeout(function() {
+              $('body').addClass('sidebar-mini');
+
+              md.misc.sidebar_mini_active = true;
+            }, 300);
+          }
+
+          // we simulate the window Resize so the charts will get updated in realtime.
+          var simulateWindowResize = setInterval(function() {
+            window.dispatchEvent(new Event('resize'));
+          }, 180);
+
+          // we stop the simulation of Window Resize after the animations are completed
+          setTimeout(function() {
+            clearInterval(simulateWindowResize);
+          }, 1000);
+
+        });
+      });
+    });
+  </script>
+
+  {% endblock javascript %}
 
 </body>
+
 </html>
 
+<!--
+=========================================================
+Material Dashboard - v2.1.2
+=========================================================
 
-<script type="text/javascript">
-	function revealMobileNavbar(){
-		navbar = document.getElementById("dashboard_navbar");
-		if (navbar.style.display != "flex"){
-			navbar.style.display = "flex";
-		}
-		else{
-			navbar.style.display = "none";
-		}
-	}/* Out of all the methods tried to switch between display flex and none, this 
-	was the most efficient*/
+Product Page: https://www.creative-tim.com/product/material-dashboard
+Copyright 2020 Creative Tim (https://www.creative-tim.com)
+Coded by Creative Tim
 
-	function changeContentMargin(mobile_title){
-		dashboardNavbar = document.getElementById("dashboard_navbar");
-		newContentMargin = (-dashboardNavbar.offsetHeight + mobile_title).toString().concat("px");
-		document.getElementById("content").style.marginTop = newContentMargin;
-		console.log(newContentMargin);
-	}/* use this solution when it's perfectly working */
-
-	/* This function changes the margin of the navigation bar and content div from 
-	mobile_title div (if in mobile view) .The goal is to make navbar cover mobile_div
-	and content to be exactly below mobile view so that it's not pushed down by navbar*/
-	function changeNavbarMargin(){
-		mobile_title = document.getElementById("mobile_title");
-		if (mobile_title.style.display === "none"){
-			console.log("Large device");
-		}
-		else{
-			newNavbarMargin = (-mobile_title.offsetHeight).toString().concat("px");
-			console.log(newNavbarMargin);
-			document.getElementById("dashboard_navbar").style.marginTop = newNavbarMargin;
-			/*changeContentMargin(mobile_title.offsetHeight)*/
-		}
-	}
-
-	/*Always call this function when page is loaded or resized */
-	changeNavbarMargin() /*on load */
-	window.onresize = changeNavbarMargin; /* when browser is resized */
-
-</script>
-
-{% block javascript %}
-{% endblock javascript %}
+=========================================================
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->

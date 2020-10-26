@@ -1,0 +1,54 @@
+{% extends 'dashboard/dashboard.html' %}
+
+{% block title %} Transactions {% endblock title %}
+{% block mobile_title %}TRANSACTIONS{% endblock mobile_title %}
+
+{% block content %}
+	
+	<div class= "add_record_row">
+		<a href = "{% url 'transactionsform' %}">Add New Transaction</a>
+	</div>
+
+	<div class = "display_records_row">
+
+		{% if not page_object %}
+			<h1 style="color: red; text-align: center;">No Transactions yet</h1>
+		{% else %}
+
+			<table class="info_table">
+				<tr>
+					<th>Transaction Type</th>
+					<th>Member Name</th>
+					<th>Amount</th>
+					<th>Date</th>
+				</tr>
+
+				{% for transaction in page_object %}
+
+					<tr>
+						<td> {{ transaction.transactionType }} </td>
+						<td> {{ transaction.memberID.user.first_name }} {{ transaction.memberID.user.last_name }}</td>
+						<td> {{ transaction.amount }}</td>
+						<td> {{ transaction.transactionDate|date:"d.m.y"}}</td>
+					</tr>
+
+				{% endfor %}
+
+			</table>
+		{% endif %}
+
+		{% if page_object.has_previous %}
+			<a class = "page_nav" href="?page=1">FIRST</a>
+			<a class = "page_nav" href="?page={{ page_object.previous_page_number }}">PREV</a>
+		{% endif %}
+
+			<a href = "#" class = "page_nav active_page">PAGE {{ page_object.number }}</a>
+
+        {% if page_object.has_next %}
+            <a class = "page_nav" href="?page={{ page_object.next_page_number }}">NEXT</a>
+            <a class = "page_nav" href="?page={{ page_object.paginator.num_pages }}"> {{ page_object.paginator.num_pages }}</a>
+        {% endif %}
+
+	</div>
+
+{% endblock content %}

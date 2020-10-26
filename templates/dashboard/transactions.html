@@ -1,54 +1,96 @@
 {% extends 'dashboard/dashboard.html' %}
 
-{% block title %} Transactions {% endblock title %}
-{% block mobile_title %}TRANSACTIONS{% endblock mobile_title %}
+{% block dashboard_active %}{% endblock dashboard_active %}
+{% block membership_active %}{% endblock membership_active %}
+{% block transactions_active %}active{% endblock transactions_active %}
+{% block loans_active %}{% endblock loans_active %}
+
+{% block page_title %}Transactions{% endblock page_title %}
 
 {% block content %}
-	
-	<div class= "add_record_row">
-		<a href = "{% url 'transactionsform' %}">Add New Transaction</a>
-	</div>
 
-	<div class = "display_records_row">
+  <div class="row">
 
-		{% if not page_object %}
-			<h1 style="color: red; text-align: center;">No Transactions yet</h1>
-		{% else %}
+    <div class="col-lg-6 col-md-6 col-sm-6">
+      <div class="card card-stats">
+        <div class="card-header card-header-success card-header-icon">
 
-			<table class="info_table">
-				<tr>
-					<th>Transaction Type</th>
-					<th>Member Name</th>
-					<th>Amount</th>
-					<th>Date</th>
-				</tr>
+          <a style = "color: #fff; cursor: pointer;" href=" {% url 'transactionsform' %} ">
 
-				{% for transaction in page_object %}
+            <div class="card-icon">
+              
+              <i class="material-icons">add</i>
+            </div>
 
-					<tr>
-						<td> {{ transaction.transactionType }} </td>
-						<td> {{ transaction.memberID.user.first_name }} {{ transaction.memberID.user.last_name }}</td>
-						<td> {{ transaction.amount }}</td>
-						<td> {{ transaction.transactionDate|date:"d.m.y"}}</td>
-					</tr>
+          </a>
+          
+          <p class="card-category">ADD</p>
+          <h3 class = "card-title"> New Transaction</h3>
 
-				{% endfor %}
+        </div>
+        <div class="card-footer">
+          <div class="stats">
+            Open a form to record a new transaction
+          </div>
+        </div>
+      </div>
+    </div>
 
-			</table>
-		{% endif %}
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title "> TRANSACTIONS </h4>
+          <p class="card-category"> PAGE {{ page_object.number }} </p>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>
+                  Type
+                </th>
+                <th>
+                  Member Name
+                </th>
+                <th>
+                  Amount
+                </th>
+                <th>
+                  Date
+                </th>
+              </thead>
+              <tbody>
 
-		{% if page_object.has_previous %}
-			<a class = "page_nav" href="?page=1">FIRST</a>
-			<a class = "page_nav" href="?page={{ page_object.previous_page_number }}">PREV</a>
-		{% endif %}
+                {% for transaction in page_object %}
 
-			<a href = "#" class = "page_nav active_page">PAGE {{ page_object.number }}</a>
+                  <tr>
+                    <td>
+                      {{ transaction.transactionType }}
+                    </td>
+                    <td>
+                      {{ transaction.memberID.user.first_name }} {{ transaction.memberID.user.last_name }}
+                    </td>
+                    <td class="text-primary">
+                      {{ transaction.amount }}
+                    </td>
+                    <td>
+                      {{ transaction.transactionDate|date:"d.m.y"}}
+                    </td>
+                  </tr>
 
-        {% if page_object.has_next %}
-            <a class = "page_nav" href="?page={{ page_object.next_page_number }}">NEXT</a>
-            <a class = "page_nav" href="?page={{ page_object.paginator.num_pages }}"> {{ page_object.paginator.num_pages }}</a>
-        {% endif %}
+                {% endfor %}
+                
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
 
-	</div>
+  </div>
 
 {% endblock content %}
+  
+{% block javascript %}
+
+{% endblock javascript %}

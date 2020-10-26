@@ -84,10 +84,8 @@ Run this to keep all static files together in the dir specified in STATIC_ROOT
 - python3 manage.py collectstatic
 
 URL; /static/
-PATH; /home/technicollins/chama_database/static/
 
-URL; /static/
-PATH; /home/technicollins/chama_database/staticfiles/admin
+PATH; /home/technicollins/chama_database/staticfiles/
 
 8) Prepare Database
 Create a database called CS_DB on pythonanywhere
@@ -236,11 +234,7 @@ server {
 
     location = /favicon.ico { access_log off; log_not_found off; }
     location /static/ {
-        root /home/collins/chama_database/;
-    }
-
-    location /media/ {
-        root /home/collins/chama_database;
+        alias /home/collins/chama_database/staticfiles/;
     }
 
     location / {
@@ -315,6 +309,7 @@ BACKING UP CHAMAZILLA's DB
 	cd ChamaZilla_backups
 
 	mysqldump -u collins -p --databases CS_DB > CS_DB.sql
+	
 
 	Download the backup;
 	exit from ssh to use scp

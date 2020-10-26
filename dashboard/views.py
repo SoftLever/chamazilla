@@ -70,7 +70,7 @@ def calculateMemberFunds(member):
 def dashboard(request):
 	session_chamaID = request.user.chamas.chamaID
 	#for the transactions div
-	recentTransactions = Transactions.objects.filter(memberID__chamaID = session_chamaID).order_by("-transactionDate")[:5]
+	recentTransactions = Transactions.objects.filter(memberID__chamaID = session_chamaID).order_by("-transactionDate")[:10]
 	numberOfTransactions = Transactions.objects.filter(memberID__chamaID = session_chamaID).count()
 
 	#Get only members who match the chama logged in and are active
@@ -265,7 +265,7 @@ def transactions(request):
 	page_number = request.GET.get('page')
 	page_object= paginated_transactions.get_page(page_number)
 
-	context = {'page_object': page_object}
+	context = {'page_object': page_object, 'transactions': transactions}
 
 	return render(request, 'dashboard/transactions.html', context)
 

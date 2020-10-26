@@ -1,62 +1,91 @@
 {% extends 'dashboard/dashboard.html' %}
 
-{% block title %} Members {% endblock title %}
-{% block mobile_title %}MEMBERSHIP{% endblock mobile_title %}
+{% block dashboard_active %}{% endblock dashboard_active %}
+{% block membership_active %}active{% endblock membership_active %}
+{% block transactions_active %}{% endblock transactions_active %}
+{% block loans_active %}{% endblock loans_active %}
+
+{% block page_title %}Membership{% endblock page_title %}
 
 {% block content %}
 
-	<div class= "add_record_row">
-		<a href = "{% url 'membersform' %}">Add New Member</a>
-	</div>
-	
-	<div class = "display_records_row">
-		<!-- confirm user deletion -->
-		{% for message in messages %}
-			<p style="color:red">{{ message }}</p>
-		{% endfor %}
+  <div class="row">
 
-		{% if not page_object %}
-			<h1 style="color:red; text-align: center;">No members yet</h1>
-		{% else %}
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="card card-stats">
+          <div class="card-header card-header-success card-header-icon">
 
-		<table class="info_table">
-			<tr>
-				<th>Member Name</th>
-				<th class = "hide_on_mobile">Phone Number</th>
-				<th>Actions</th>
-			</tr>
+            <a style = "color: #fff; cursor: pointer;" href=" {% url 'membersform' %} ">
 
-			{% for member in page_object %}
+              <div class="card-icon">
+                
+                <i class="material-icons">add</i>
+              </div>
 
-				<tr>
-					<td> {{ member.user.first_name }} {{ member.user.last_name }}</td>
-					<td class = "hide_on_mobile"> {{ member.user.username }} </td>
-					<td><a href = "memberpage/{{ member.user.username }}/">More Info</a> | <a style = "color: red;" href = "delete/{{ member.chamaID }}/{{ member.user.username }}/">Remove</a></td>
-				</tr>
+            </a>
+            
+            <p class="card-category">ADD</p>
+            <h3 class = "card-title"> New Members</h3>
 
-				<!--<tr>
-					<td class = "hide_on_mobile"></td>
-					<td></td>
-					<td><a href = "memberpage/{{ member.user.username }}/">More Info</a> | <a style = "color: red;" href = "delete/{{ member.chamaID }}/{{ member.user.username }}/">Remove</a></td>
-				</tr>-->
+          </div>
+          <div class="card-footer">
+            <div class="stats">
+              Open a form to add members to your group
+            </div>
+          </div>
+        </div>
+      </div>
 
-			{% endfor %}
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title "> MEMBERS </h4>
+          <p class="card-category"> PAGE {{ page_object.number }} </p>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
 
-		</table>
-		{% endif %}
+                <th>
+                  Member Name
+                </th>
+                <th>
+                  Phone Number
+                </th>
+                <th>
+                  Actions
+                </th>
+              </thead>
+              <tbody>
 
-		{% if page_object.has_previous %}
-			<a class = "page_nav" href="?page=1">FIRST</a>
-			<a class = "page_nav" href="?page={{ page_object.previous_page_number }}">PREV</a>
-		{% endif %}
+                {% for member in page_object %}
 
-			<a href = "#" class = "page_nav active_page">PAGE {{ page_object.number }}</a>
+                  <tr>
+                    <td>
+                      {{ member.user.first_name }} {{ member.user.last_name }}
+                    </td>
+                    <td>
+                      {{ member.user.username }}
+                    </td>
+                    <td>
+                      <a href = "memberpage/{{ member.user.username }}/">More Info</a> | <a style = "color: red;" href = "delete/{{ member.chamaID }}/{{ member.user.username }}/">Remove</a>
+                    </td>
+                  </tr>
 
-        {% if page_object.has_next %}
-            <a class = "page_nav" href="?page={{ page_object.next_page_number }}">NEXT</a>
-            <a class = "page_nav" href="?page={{ page_object.paginator.num_pages }}"> {{ page_object.paginator.num_pages }}</a>
-        {% endif %}
+                {% endfor %}
+                
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
 
-	</div>
+  </div>
 
 {% endblock content %}
+  
+{% block javascript %}
+
+{% endblock javascript %}
