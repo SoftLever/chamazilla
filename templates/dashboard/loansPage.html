@@ -1,40 +1,91 @@
 {% extends 'dashboard/dashboard.html' %}
-{% block title %} Loans {% endblock title %}
-{% block mobile_title %}LOANS{% endblock mobile_title %}
+
+{% block dashboard_active %}{% endblock dashboard_active %}
+{% block membership_active %}{% endblock membership_active %}
+{% block transactions_active %}{% endblock transactions_active %}
+{% block loans_active %}active{% endblock loans_active %}
+
+{% block page_title %}Loans{% endblock page_title %}
 
 {% block content %}
 
-<div class = "display_records_row">
+  <div class="row">
 
-	{% if not loans %}
-		<h1 style="color: red; text-align: center;">No Loans Issued</h1>
-	{% else %}
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title "> LOANS </h4>
+          <p class="card-category"> Loans issued in the past </p>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
 
-	<table class = "info_table">
-		<tr>
-			<th>Member</th>
-			<th>Amount</th>
-			<th>Borrow Date</th>
-			<th>Repayment Date</th>
-			<th>Repayment Amount</th>
-			<th>Status</th>
-		</tr>
+			{% if not loans %}
+				<h1 style="color: red; text-align: center;">No Loans Issued</h1>
+			{% else %}
 
-	{% for loan in loans %}
-		<tr>
-			<td>{{ loan.memberID }}</td>
-			<td>{{ loan.amount }}</td>
-			<td>{{ loan.issueDate.date }}</td>
-			<td>{{ loan.repaymentDate.date }}</td>
-			<td>{{ loan.repaymentAmount }}</td>
-			<td>{{ loan.status }}</td>
-		</tr>
-	{% endfor %}
+            <table class="table">
+              <thead class=" text-primary">
+                <th>
+                  Member
+                </th>
+                <th>
+                  Amount
+                </th>
+                <th>
+                  Borrow Date
+                </th>
+                <th>
+                  Repayment Date
+                </th>
+                <th>
+                	Repayment Amount
+                </th>
+                <th>
+                	Status
+                </th>
+              </thead>
+              <tbody>
 
-	</table>
+                {% for loan in loans %}
 
-	{% endif %}
+                  <tr>
+                    <td>
+                      {{ loan.memberID }}
+                    </td>
+                    <td class="text-primary">
+                      {{ loan.amount }}
+                    </td>
+                    <td class="text-primary">
+                    	{{ loan.repaymentAmount }}
+                    </td>
+                    <td>
+                    {{ loan.issueDate.date }}                      
+                    </td>
+                    <td>
+                      {{ loan.repaymentDate.date }}
+                    </td>
+                    <td>
+                    	{{ loan.status }}
+                    </td>
+                  </tr>
 
-</div>
+                {% endfor %}
+                
+              </tbody>
+            </table>
+
+        {% endif %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 
 {% endblock content %}
+  
+{% block javascript %}
+
+{% endblock javascript %}

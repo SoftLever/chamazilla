@@ -82,6 +82,23 @@
       </div>
     </div>
 
+    <ul class="pagination pagination-info">
+
+      {% if page_object.has_previous %}
+        <li class="page-item"><a href="?page={{ page_object.previous_page_number }}" class="page-link"> prev</a></li>
+        <li class="page-item"><a href="?page=1" class="page-link">1</a></li>
+      {% endif %}
+
+      <li class=" active page-item"><a href="#" class="page-link">{{ page_object.number }}</a></li>
+      <li class="page-item"><a href="?page={{ page_object.paginator.num_pages }}" class="page-link">{{ page_object.paginator.num_pages }}</a></li>
+      
+
+      {% if page_object.has_next %}
+      <li class="page-item"><a href="?page={{ page_object.next_page_number }}" class="page-link">next </a></li>
+      {% endif %}
+      
+    </ul>
+
   </div>
 
 {% endblock content %}

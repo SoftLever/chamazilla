@@ -1,19 +1,57 @@
 {% extends 'dashboard/dashboard.html' %}
 
-{% block title %} Transactions {% endblock title %}
-{% block mobile_title %}TRANSACTIONS{% endblock mobile_title %}
-{% block content %}
-	
-	{% for message in messages %}
-		<p style="color:red">{{ message }}</p>
-	{% endfor %}
+{% block dashboard_active %}{% endblock dashboard_active %}
+{% block membership_active %}{% endblock membership_active %}
+{% block transactions_active %}active{% endblock transactions_active %}
+{% block loans_active %}{% endblock loans_active %}
 
-	<div class = "form_div" id = "form_div">
-		<form class = "site_form" action = "#" method="POST">
-			{% csrf_token %}
-			{{ form }}
-			<input type="submit" value=" Add Transaction" class="submit">
-		</form>
-	</div>
+{% block page_title %}Transactions{% endblock page_title %}
+
+
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title">New Transaction</h4>
+          <p class="card-category">Record a new Transaction</p>
+        </div>
+        <div class="card-body">
+          <form action = "#" method="POST">
+          	{% csrf_token %}
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Member</label>
+                  {{ form.memberID }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Transaction Type</label>
+                  {{ form.transactionType }}
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Amount</label>
+                  {{ form.amount }}
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary pull-right">Record Transaction</button>
+            <div class="clearfix"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
 {% endblock content %}
+  
+{% block javascript %}
+
+{% endblock javascript %}

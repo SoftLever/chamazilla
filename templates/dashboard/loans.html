@@ -1,91 +1,107 @@
 {% extends 'dashboard/dashboard.html' %}
 
-{% block title %} Members {% endblock title %}
-{% block mobile_title %}LOANS{% endblock mobile_title %}
-
 {% block dashboard_active %}{% endblock dashboard_active %}
 {% block membership_active %}{% endblock membership_active %}
 {% block transactions_active %}{% endblock transactions_active %}
 {% block loans_active %}active{% endblock loans_active %}
 
+{% block page_title %}Loans{% endblock page_title %}
 
-{% block stylesheet %}
-	<style type="text/css">
-		.column{
-			margin-top: 10px;
-			display: flex;
-			flex-direction: column;
-			width: 100%;
-		}
 
-		.loan_form{
-			width: 100%;
-		}
-
-		button{
-			width: 200px;
-			height: 40px;
-		}
-
-		h2{
-			font-size: 22px;
-			color: #0574FA;
-		}
-
-		.messages{
-			color: red;
-		}
-	</style>
-{% endblock stylesheet %}
 
 {% block content %}
+  <div class="row">
 
-<div class="column">
-	<h2> Loan Settings </h2>
-</div>
+    <div class="col-md-7">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title">Issue Loan</h4>
+          <p class="card-category">Record a new loan</p>
+        </div>
+        <div class="card-body">
+          <form method = "POST" action = "#">
+          	{% csrf_token %}
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Member</label>
+                  {{ loanForm.memberID }}
+                </div>
+              </div>
+          	</div>
+          	<div class = "row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Amount</label>
+                  {{ loanForm.amount }}
+                </div>
+              </div>
+            </div>
+            <button type="submit" name = "submit_loan" class="btn btn-primary pull-left">Issue Loan</button>
+            <div class="clearfix"></div>
+          </form>
+        </div>
+      </div>
+    </div>
 
-<div class="column">
+    <div class="col-md-5">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title">Loan Settings</h4>
+          <p class="card-category">Change interest rate and repayment settings</p>
+        </div>
+        <div class="card-body">
+          <form method = "POST" action = "#" id = "loan_settings_form">
+          	{% csrf_token %}
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Interest Rate (%)</label>
+                  <input type="number" id = "interest_rate" step=".01" value="{{ loanSettings.interestRate }}" class="form-control" name = "interest_rate" disabled>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Repayment Period (days)</label>
+                  <input type="number" id = "repayment_period" value = "{{ loanSettings.repaymentPeriod }}" name = "repayment_period"class="form-control" disabled>
+                </div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </form>
+            <button id = "enable_loan_settings" onclick="enableLoanSettings()" class="btn btn-primary pull-left">Update Settings</button>
+            <button id = "hide_loan_settings" onclick="hideLoanSettings()" style="display: none;" class="btn btn-primary pull-left">Cancel</button>
+            <button type="submit" id = "submit_loan_settings" style = "display:none;" name = "submit_loan_settings" class="btn btn-primary pull-right" form = "loan_settings_form">Confirm Changes</button>
+        </div>
+      </div>
+    </div>
 
-	<form method = "POST" action = "#" class="loan_form">
-		{% csrf_token %}
-		<label for = "interest_rate"> Interest Rate (%)</label>
-		<input type = "number" id = "interest_rate" step = ".01" value="{{ loanSettings.interestRate }}" disabled name = "interest_rate">
-		<label for = "repayment_period"> Repayment Period (days)</label>
-		<input type = "number" id = "repayment_period" value = "{{ loanSettings.repaymentPeriod }}" name = "repayment_period" disabled>
-		<input type = "submit" id = "submit_loan_settings" disabled style="display: none;" value = "change settings" name = "submit_loan_settings">
-	</form>
+    <div class="col-lg-4 col-md-6 col-sm-6">
+      <div class="card card-stats">
+        <div class="card-header card-header-success card-header-icon">
 
-</div>
+          <a style = "color: #fff; cursor: pointer;" href=" {% url 'loanspage' %} ">
 
-<div class="column">
-	<button id = "enable_loan_settings" onclick="enableLoanSettings()">Change Loan Settings</button>
-	<button id = "hide_loan_settings" onclick="hideLoanSettings()" style="display: none;">Cancel</button>
-</div>
+            <div class="card-icon">
+              
+              <i class="material-icons">visibility</i>
+            </div>
 
-<div class="column">
-	<h2> Issue Loan</h2>
-</div>
+          </a>
+          
+          <p class="card-category">VIEW</p>
+          <h3 class = "card-title"> LOANS ISSUED</h3>
 
-<div class="column">
+        </div>
+        <div class="card-footer">
+          <div class="stats">
+            See loans that were issued earlier
+          </div>
+        </div>
+      </div>
+    </div>
 
-	<form method="POST" action = "#" class="loan_form">
-		{% csrf_token %}
-		{{ loanForm }}
-		<input type="submit" name="submit_loan" value="issue loan">
-	</form>
-
-</div>
-
-<div class="column messages">
-	{% for messages in messages %}
-		{{ messages }}
-	{% endfor %}
-</div>
-
-<div class="column">
-	<a href="loanspage">View issued loans</a>
-</div>
-
+  </div>
 
 {% endblock content %}
 
