@@ -1,16 +1,43 @@
 {% extends 'dashboard/dashboard.html' %}
 
-{% block title %} Deletion {% endblock title %}
-{% block mobile_title %}DELETION{% endblock mobile_title %}
+{% block dashboard_active %}{% endblock dashboard_active %}
+{% block membership_active %}active{% endblock membership_active %}
+{% block transactions_active %}{% endblock transactions_active %}
+{% block loans_active %}{% endblock loans_active %}
+
+{% block page_title %}Delete Member{% endblock page_title %}
+
 {% block content %}
 
-	<div class = "deletion">
-		<form action = "#" method = "post" class="deletion_form">
-			{% csrf_token %}
-			<button class = "deletion_button delete_yes" type = "submit" value = "yes" name = "confirmation">{{ prompt }}</button>
-			<button class = "deletion_button delete_no" type = "submit" value = "no" name = "confirmation">Cancel</button>
-		</form>
+<div class="row">
 
-	</div>
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModal"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModal">Member Deletion</h5>
+      </div>
+      <div class="modal-body">
+      	{{ prompt }}
+      </div>
+      <div class="modal-footer">
+      	<form action = "#" method="post">
+        	{% csrf_token %}
+        	<button class="btn btn-danger" type = "submit" value="yes" name="confirmation">Confirm Deletion</button>
+        	<button class="btn btn-success" type = "submit" value="no" name="confirmation">Cancel</button>
+    	</form>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
 
 {% endblock content %}
+
+{% block javascript %}
+	<script type="text/javascript">
+		$('#deleteModal').modal('show') 
+	</script>
+{% endblock javascript %}

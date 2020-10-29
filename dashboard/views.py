@@ -111,18 +111,19 @@ def transactionsform(request):
 
 		#check if the amount is valid
 		if int(request.POST.get('amount')) < 1:
-			messages.warning(request, "Amount must be greater than 0")
+			messages.warning(request, "<script>md.showNotification('top','right', 'Amount must be greater than 0', 'danger')</script>")
 			return HttpResponseRedirect('transactionsform')
 
 		#check if the amount exceeds available funds for withdrawals
 		if (request.POST.get('transactionType') == 'withdrawal' and funds - int(request.POST.get('amount'))) < 0:
-			messages.warning(request, "Not enough funds to give %s" % request.POST.get('amount'))
+			messages.warning(request, "<script>md.showNotification('top','right', 'Not enough funds to give %s', 'warning')</script>" % request.POST.get('amount'))
 			return HttpResponseRedirect('transactionsform')
 
 		form = forms.addTransaction(session_chamaID, data = request.POST)
 		if form.is_valid():
 			form.save()
-			return HttpResponseRedirect('transactions')
+			messages.success(request, "<script>md.showNotification('top','right', 'Transaction Recorded', 'success')</script>")
+			return HttpResponseRedirect('transactionsform')
 
 	return render(request, 'dashboard/transactionsForm.html', context)
 
@@ -140,7 +141,7 @@ def membersform(request):
 
 		#if phone number is invalid
 		if not phoneValidation(username):
-			messages.warning(request, "Enter a phone number with format: 07********")
+			messages.warning(request, "<script>md.showNotification('top','right', 'Enter a phone number with format 07********', 'danger')</script>")
 			#refresh the same page to display error
 			return HttpResponseRedirect('membersform')
 
@@ -148,7 +149,7 @@ def membersform(request):
 		if username == request.user.username:
 			try:
 				ChamaMembers.objects.get(user__username = username)
-				messages.warning(request, "You are already a member")
+				messages.warning(request, "<script>md.showNotification('top','right', 'You are already a member', 'warning')</script>")
 			except ChamaMembers.DoesNotExist:
 				#set name as provided by admin
 				request.user.first_name = first_name
@@ -158,11 +159,11 @@ def membersform(request):
 				memberInstance = ChamaMembers(user = request.user, chamaID = Chamas(chamaID = session_chamaID))
 				memberInstance.save()
 				request.user.save()
-				messages.success(request, "You added yourself to the group")
+				messages.success(request, "<script>md.showNotification('top','right', 'You added yourself to the group', 'success')</script>")
 			except:
-				messages.error(request, "Something went wrong")
+				messages.warning(request, "<script>md.showNotification('top','right', 'Something went wrong', 'danger')</script>")
 
-			return HttpResponseRedirect('members')
+			return HttpResponseRedirect('membersform')
 
 		try:
 			checkUser = ChamaMembers.objects.get(user__username = username)
@@ -174,9 +175,9 @@ def membersform(request):
 				checkUser.user.last_name = last_name
 
 				checkUser.user.save()
-				messages.success(request, "%s was added back to the group as %s %s" % (username, first_name, last_name))
+				messages.success(request, "<script>md.showNotification('top','right', '%s was added back to the group as %s %s', 'success')</script>" % (username, first_name, last_name))
 			else:
-				messages.warning(request, "%s already has a ChamaZilla account" %username)
+				messages.warning(request, "<script>md.showNotification('top','right', '%s already has a ChamaZilla account', 'warning')</script>" %username)
 
 		except ChamaMembers.DoesNotExist:
 			#if the DoesNotExist error is raised, try to register the user
@@ -190,15 +191,15 @@ def membersform(request):
 				newMemberExtension = ChamaMembers(user = newMember, chamaID = Chamas(chamaID = session_chamaID))
 
 				newMemberExtension.save()
-				messages.success(request, "%s was added to the group" %username)
+				messages.success(request, "<script>md.showNotification('top','right', '%s was added to the group', 'success')</script>" %username)
 			except:
-				messages.warning(request, "%s could not be added to the group" %username)
+				messages.warning(request, "<script>md.showNotification('top','right', '%s could not be added to the group', 'danger')</script>" %username)
 		
 		#if some other error is raised
 		except:
-			messages.warning(request, "Something went wrong")
+			messages.warning(request, "<script>md.showNotification('top','right', 'Something went wrong', 'danger')</script>")
 		
-		return HttpResponseRedirect('members')
+		return HttpResponseRedirect('membersform')
 
 	return render(request, 'dashboard/membersForm.html')
 
@@ -227,14 +228,14 @@ def deleteUser(request, chamaID = None, username = None):
 
 	#to prevent admins from deleting the group
 	if request.user.username == username:
-		messages.warning(request, "Call 0798380239 to change the group admin. Note: Changing admin will cost KSH30")
+		messages.warning(request, "<script>md.showNotification('top','right', 'Call 0798380239 to change the group admin. Note: Changing admin will cost KSH30', 'warning')</script>")
 		return HttpResponseRedirect('/members')
 
 	#to ensure a chama admin can disable only their members
 	if session_chamaID == chamaID:
 		#Get the username of member to be deleted
 		user = User.objects.get(username = username)
-		context = {'prompt': "Delete %s" %user.first_name}
+		context = {'prompt': "Are you sure you want to remove %s from the group?" %(user.first_name).upper()}
 
 		if request.method == "POST":
 			confirmation = request.POST.get('confirmation')
@@ -242,15 +243,15 @@ def deleteUser(request, chamaID = None, username = None):
 			if confirmation == "yes":
 				user.is_active = False
 				user.save()
-				messages.success(request, user.first_name + ' has been removed from ' + request.user.chamas.chamaName)
+				messages.success(request, "<script>md.showNotification('top','right', '%s has been removed from %s', 'success')</script>" %(user.first_name, request.user.chamas.chamaName))
 			elif confirmation == "no":
-				messages.warning(request, 'deletion of %s cancelled' %user.first_name)
+				messages.warning(request, "<script>md.showNotification('top','right', 'Deletion of %s cancelled', 'warning')</script>" %user.first_name)
 			else:
-				messages.warning(request, 'invalid input')
+				messages.warning(request, "<script>md.showNotification('top','right', 'Invalid input', 'danger')</script>")
 
 			return HttpResponseRedirect('/members')
 	else:
-		messages.warning(request, 'The member does not exist')
+		messages.warning(request, "<script>md.showNotification('top','right', 'The member does not exist', 'danger')</script>")
 		return HttpResponseRedirect('/members')
 
 	return render(request, 'dashboard/deleteUser.html', context)
@@ -281,17 +282,35 @@ def loans(request):
 
 	if request.method == "POST":
 		if "submit_loan_settings" in request.POST:
-			loanSettings.interestRate = request.POST.get('interest_rate')
-			loanSettings.repaymentPeriod = request.POST.get('repayment_period')
+			interest = request.POST.get('interest_rate')
+			repayment = request.POST.get('repayment_period')
+
+			#check if loan settings are valid
+			if float(interest) < 0:
+				messages.warning(request, "<script>md.showNotification('top','right', 'Interest rate must be greater than 0', 'danger')</script>")
+				return HttpResponseRedirect('loans')
+
+			if int(repayment) < 0:
+				messages.warning(request, "<script>md.showNotification('top','right', 'Days must be greater than 0', 'danger')</script>")
+				return HttpResponseRedirect('loans')
+
+			loanSettings.interestRate = interest
+			loanSettings.repaymentPeriod = repayment
 			loanSettings.save()
-			messages.success(request, "Loan settings changed")
+			messages.success(request, "<script>md.showNotification('top','right', 'Loan settings changed', 'success')</script>")
 
 		elif "submit_loan" in request.POST:
 			loanForm = forms.loanForm(session_chamaID, data = request.POST)
-			#check if chama has enough money
 			amount = int(request.POST.get('amount'))
+
+			#Check if amount is valid
+			if amount <= 0:
+				messages.warning(request, "<script>md.showNotification('top','right', 'Amount must be greater than 0', 'danger')</script>")
+				return HttpResponseRedirect('loans')
+
+			#check if chama has enough money
 			if(funds - amount) < 0:
-				messages.warning(request, "There is no enough money to issue %d" %amount)
+				messages.warning(request, "<script>md.showNotification('top','right', 'There is no enough money to issue %d', 'warning')</script>" %amount)
 
 			else:
 				if loanForm.is_valid():
@@ -299,9 +318,9 @@ def loans(request):
 					loanFormInstance.repaymentAmount = loanFormInstance.amount + ((loanSettings.interestRate/100)*loanFormInstance.amount)
 					loanFormInstance.repaymentDate = loanFormInstance.issueDate + timezone.timedelta(days = loanSettings.repaymentPeriod)
 					loanFormInstance.save()
-					messages.success(request, "Loan issued")
+					messages.success(request, "<script>md.showNotification('top','right', 'Loan issued', 'success')</script>")
 				else:
-					messages.warning(request, "something went wrong")
+					messages.warning(request, "<script>md.showNotification('top','right', 'Something went wrong', 'danger')</script>")
 		else:
 			#meme this person if they are making a bad request
 			return HttpResponseRedirect('https://bit.ly/3lZ8kiV')

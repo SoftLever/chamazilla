@@ -8,7 +8,7 @@
 {% block page_title %}Transactions{% endblock page_title %}
 
 {% block content %}
-
+  
   <div class="row">
 
     <div class="col-lg-6 col-md-6 col-sm-6">
@@ -96,11 +96,11 @@
       {% endif %}
 
       <li class=" active page-item"><a href="#" class="page-link">{{ page_object.number }}</a></li>
-      <li class="page-item"><a href="?page={{ page_object.paginator.num_pages }}" class="page-link">{{ page_object.paginator.num_pages }}</a></li>
       
 
       {% if page_object.has_next %}
-      <li class="page-item"><a href="?page={{ page_object.next_page_number }}" class="page-link">next </a></li>
+        <li class="page-item"><a href="?page={{ page_object.paginator.num_pages }}" class="page-link">{{ page_object.paginator.num_pages }}</a></li>
+        <li class="page-item"><a href="?page={{ page_object.next_page_number }}" class="page-link">next </a></li>
       {% endif %}
       
     </ul>
@@ -110,5 +110,10 @@
 {% endblock content %}
   
 {% block javascript %}
+
+<script type="text/javascript">
+  console.log(md);
+  /*md.showNotification('top','right', 'Transaction recorded')*/
+</script>
 
 {% endblock javascript %}

@@ -315,11 +315,16 @@
   <script src="{% static '/assets/js/plugins/arrive.min.js' %} "></script>
   <!-- Chartist JS -->
   <script src="{% static '/assets/js/plugins/chartist.min.js' %} "></script>
-  <!--  Notifications Plugin    -->
+  <!--  Notifications Plugin -->   
   <script src="{% static '/assets/js/plugins/bootstrap-notify.js' %} "></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="{% static '/assets/js/material-dashboard.js' %}?v=2.1.2 " type="text/javascript"></script>
-  
+ 
+{% for message in messages %}
+  {{ message | safe }}
+{% endfor %}
+
+
   {% block javascript %}
 
   <script>
