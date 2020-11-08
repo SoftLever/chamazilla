@@ -13,6 +13,9 @@ from dashboard.formvalidations import phoneValidation
 def index(request):
 	return render(request, 'member_records/index.html')
 
+def api(request):
+	return render(request, 'member_records/api.html')
+
 #Redirect the user if they are already authenticated
 @userNotAuthenticated
 def signup(request):

@@ -325,3 +325,65 @@ RESTORING CHAMAZILLA's DB
 
 	If you get an error like this; ERROR 1227 (42000) at line 505: Access denied; you need (at least one of) the SUPER privilege(s) for this operation
 	Delete the line that requires super user permissions
+
+
+
+WEBMIN
+
+Installation; 
+	wget http://prdownloads.sourceforge.net/webadmin/webmin_1.960_all.deb
+	sudo dpkg --install webmin_1.960_all.deb
+
+Enable port 10000
+	sudo ufw allow 8000
+
+Login; https://chamazilla.com:10000/
+User: Root
+Password: root password
+
+Install sendmail mail server within webmin
+
+Create mail folder for user
+mkdir /var/spool/mail/collins
+
+Mail guidelines; https://support.google.com/mail/answer/81126?hl=en&vid=1-635789122382665739-3305764358
+
+Creating Email Account;
+https://www.interserver.net/tips/kb/how-to-create-email-accounts-in-webmin/
+
+
+CHAMAZILLA API
+How it was made
+1: Install Django rest framework in venv
+	pip install djangorestframework
+
+2: Update settings (production, development and vps)
+	INSTALLED APPS = ['rest_framework']
+
+3: Serialize the models
+	create a file serializers.py within the dashboard app
+
+4: Create a views file for your api
+	api_views.py
+
+5: Create a urls file in the app folder for your api
+	api_urls.py
+
+6: Edit urls.py at project level to point to api_urls.py when one visits chamazilla.com/restapi
+
+In summary, each endpoint will need to have; Model + serializer + viewset + url
+
+Authentication
+We are using token authentication
+	INSTALLED_APPS = ['rest_framework.authtoken']
+	python manage.py migrate
+
+update settings.py to allow authentication through token only
+
+	REST_FRAMEWORK = {
+	   'DEFAULT_AUTHENTICATION_CLASSES': (
+	       'rest_framework.authentication.TokenAuthentication',
+	   ),
+	}
+
+Reference; https://medium.com/swlh/build-your-first-rest-api-with-django-rest-framework-e394e39a482c

@@ -1,0 +1,39 @@
+1: Getting Authentication Token
+Method: POST
+curl --data "username=username&password=password"  https://chamazilla.com/restapi/getapitoken
+
+If the correct username and password is supplied, you will get a response containing your token
+
+NOTE: You need to include this token for every request you make, so save the token somewhere
+
+2:Transactions
+Use this endpoint to get a list of all transactions
+
+Method: GET
+curl -H 'Authorization: Token your_token' https://chamazilla.com/restapi/transactions/
+
+3: Members
+Use this endpoint to get a list of all group members
+
+Method: GET
+curl -H 'Authorization: Token your_token' https://chamazilla.com/restapi/members/
+
+4: Loans
+Use this endpoint to get a list of all loans
+
+Method: GET
+curl -H 'Authorization: Token your_token' https://chamazilla.com/restapi/loans/
+
+5: LoanSettings
+Use this endpoint to get your loan settings
+
+Method: GET
+curl -H 'Authorization: Token your_token' https://chamazilla.com/restapi/loansettings/
+
+6: Subscriptions
+Use this endpoint to get a list of all your subscriptions
+
+Method: GET
+curl -H 'Authorization: Token your_token' https://chamazilla.com/restapi/loansettings/
+
+49299ca0804629f20773dd6b93a296877e26b973

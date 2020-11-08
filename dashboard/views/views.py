@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
-from .models import ChamaMembers, Transactions, Chamas, Subscriptions, LoanSettings, Loans
-from . import forms
+from ..models import ChamaMembers, Transactions, Chamas, Subscriptions, LoanSettings, Loans
+from .. import forms
 
 #for confirming deletion of users
 from django.contrib import messages
@@ -16,7 +16,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 
 #for validations
-from .formvalidations import phoneValidation
+from ..formvalidations import phoneValidation
 
 #to paginate data so that table doesn't get too long
 from django.core.paginator import Paginator
