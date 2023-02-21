@@ -1,6 +1,5 @@
 from django.contrib import admin
-from django.urls import path, include
-from django.conf.urls import re_path
+from django.urls import path, re_path, include
 from member_records.views import index, api, signup, loginpage, logoutUser
 from dashboard.views.views import dashboard, members, transactions, loans, membersform, transactionsform, memberPage, deleteUser, loansPage
 

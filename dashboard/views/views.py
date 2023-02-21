@@ -211,9 +211,11 @@ def members(request):
 	members_list = ChamaMembers.objects.filter(chamaID = session_chamaID, user__is_active = True).order_by("-memberID")
 	paginated_members = Paginator(members_list, 10)
 	page_number = request.GET.get('page')
-	page_object= paginated_members.get_page(page_number)
+	page_object = paginated_members.get_page(page_number)
 
-	context = {'page_object': page_object}
+	chamaInfo = request.user.chamas
+
+	context = {'page_object': page_object, 'chamaInfo':chamaInfo}
 
 	return render(request, 'dashboard/chamaMembers.html', context)
 
@@ -266,7 +268,9 @@ def transactions(request):
 	page_number = request.GET.get('page')
 	page_object= paginated_transactions.get_page(page_number)
 
-	context = {'page_object': page_object, 'transactions': transactions}
+	chamaInfo = request.user.chamas
+
+	context = {'page_object': page_object, 'transactions': transactions, 'chamaInfo':chamaInfo}
 
 	return render(request, 'dashboard/transactions.html', context)
 
@@ -362,7 +366,17 @@ def memberPage(request, username =None):
 		numberOfTransactions = Transactions.objects.filter(memberID = userInfo).count()
 		funds = calculateMemberFunds(userInfo);
 
-		context = {"viewingUser":viewingUser, "userInfo": userInfo, "userGroup": userGroup, "funds": funds, "numberOfTransactions" :numberOfTransactions, 'page_object':page_object}
+		chamaInfo = request.user.chamas
+
+		context = {
+		    "viewingUser":viewingUser,
+		     "userInfo": userInfo,
+		     "userGroup": userGroup,
+		     "funds": funds,
+		     "numberOfTransactions" :numberOfTransactions,
+		     'page_object':page_object,
+		     'chamaInfo':chamaInfo
+		}
 	
 	else:
 		return HttpResponse('You are not authorized to view this page')

@@ -1,5 +1,4 @@
-from django.urls import path, include
-from django.conf.urls import re_path
+from django.urls import path, re_path, include
 from .views import api_views
 
 #For generation of tokens to views
